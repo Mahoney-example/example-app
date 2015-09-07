@@ -8,8 +8,8 @@ package object http {
   type ?[T] = Option[T]
   type Identity = uk.org.lidalia.lang.Identity @field
 
-  implicit def instanceToSome[T](instance: T) = Some(instance)
-  implicit def someToInstance[T](some: Some[T]) = some.get
+  implicit def instanceToSome[T](instance: T): Some[T] = Some(instance)
+  implicit def someToInstance[T](some: Some[T]): T = some.get
   implicit def typeToLeft[A,B](instance: A): Either[A,B] = Left(instance)
   implicit def typeToRight[A,B](instance: B): Either[A,B] = Right(instance)
 
@@ -17,5 +17,6 @@ package object http {
     def or[B >: A](default: => B): B = option.getOrElse(default)
     def ?[B](f: A => ?[B]): ?[B] = option.flatMap(f)
   }
-  implicit def toRichOption[A](option: Option[A]) = new ToRichOption(option)
+
+  implicit def toRichOption[A](option: Option[A]): ToRichOption[A] = new ToRichOption(option)
 }

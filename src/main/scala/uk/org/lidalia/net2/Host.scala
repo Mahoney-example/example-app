@@ -1,5 +1,15 @@
 package uk.org.lidalia.net2
 
-case class Host(name: String) {
-  override def toString = name
+object Host {
+
+  def apply(hostStr: String): Host = HostParser.parse(hostStr)
+
+}
+
+abstract class Host private[net2]() extends Immutable
+
+object HostParser {
+  def parse(hostStr: String): Host = {
+    ???
+  }
 }

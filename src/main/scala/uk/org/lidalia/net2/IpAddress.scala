@@ -7,4 +7,6 @@ object IpAddress {
   }
 }
 
-abstract class IpAddress private[net2]() extends Host(toString)
+abstract class IpAddress private[net2]() extends Host {
+
+}

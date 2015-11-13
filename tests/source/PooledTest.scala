@@ -6,7 +6,7 @@ object PooledTest {
 
   def main(args: Array[String]) {
 
-    EnvironmentDefinition.withA { environment =>
+    EnvironmentDefinition().withA { environment =>
       // do whatever here
     }
   }

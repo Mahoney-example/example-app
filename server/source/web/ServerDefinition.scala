@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.server.web
 
-import uk.org.lidalia.exampleapp.system.awaitInterruption
+import uk.org.lidalia.exampleapp.system.{JdbcConfig, awaitInterruption}
 import uk.org.lidalia.exampleapp.server.application.{ApplicationDefinition, ApplicationConfig}
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.net.{Port, Url}
@@ -12,6 +12,8 @@ import scala.collection.JavaConversions.propertiesAsScalaMap
 
 object ServerDefinition {
 
+  def apply(config: ServerConfig) = new ServerDefinition(config)
+
   def main(args: Array[String]) {
 
     val config = configFor(
@@ -20,20 +22,27 @@ object ServerDefinition {
       System.getenv().toMap
     )
 
-    new ServerDefinition(config).runUntilInterrupted()
+    ServerDefinition(config).runUntilInterrupted()
   }
 
-  def configFor(
+  private def configFor(
     args: immutable.Seq[String],
     sysProps: Map[String, String],
     env: Map[String, String]
   ): ServerConfig = {
 
-    new ServerConfig (
+    ServerConfig (
 
-      new ApplicationConfig(
+      ApplicationConfig(
         sendGridUrl = Url("http://www.example.com"),
-        contentfulUrl = Url("http://www.disney.com")
+        sendGridToken = "",
+        contentfulUrl = Url("http://www.disney.com"),
+        jdbcConfig = JdbcConfig(
+          Url(""),
+          "sa",
+          "",
+          "SELECT 1"
+        )
       ),
 
       localPort = Port(80)
@@ -41,11 +50,11 @@ object ServerDefinition {
   }
 }
 
-class ServerDefinition(
+class ServerDefinition private (
   config: ServerConfig
 ) extends ResourceFactory[Server] {
 
-  val applicationDefinition = new ApplicationDefinition(
+  val applicationDefinition = ApplicationDefinition(
     config.applicationConfig
   )
 
@@ -57,7 +66,7 @@ class ServerDefinition(
 
     applicationDefinition.withA { application =>
 
-      val server = new Server(application, config)
+      val server = Server(application, config)
 
       try {
         server.start()

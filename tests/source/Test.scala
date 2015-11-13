@@ -11,7 +11,7 @@ object Test extends HasLogger {
 
   def main(args: Array[String]) {
 
-    EnvironmentDefinition.withA { environment =>
+    EnvironmentDefinition().withA { environment =>
       log.info(s"Running a test against server on port ${environment.server.localPort} $environment")
     }
   }

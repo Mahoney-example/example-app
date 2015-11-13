@@ -1,13 +1,14 @@
-package uk.org.lidalia.exampleapp.local
+package uk.org.lidalia
+package exampleapp
+package local
 
-import org.apache.commons.lang3.RandomStringUtils
-import uk.org.lidalia.exampleapp
-import exampleapp.server.application.ApplicationConfig
-import exampleapp.server.web.{ServerDefinition, ServerConfig}
-import uk.org.lidalia.exampleapp.system.{JdbcConfig, awaitInterruption}
-import uk.org.lidalia.net.{Uri, Url, Port}
+import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
+import server.application.ApplicationConfig
+import server.web.{ServerDefinition, ServerConfig}
+import system.{blockUntilShutdown, DatabaseDefinition, JdbcConfig}
+import net.{Port, Uri}
 
-import uk.org.lidalia.scalalang.ResourceFactory
+import scalalang.ResourceFactory
 import ResourceFactory.withAll
 
 import uk.org.lidalia.stubhttp.StubHttpServerFactory
@@ -15,54 +16,58 @@ import uk.org.lidalia.stubhttp.StubHttpServerFactory
 object EnvironmentDefinition {
 
   def apply(
+    port: ?[Port] = None,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     stub2Definition: StubHttpServerFactory = StubHttpServerFactory(),
-    jdbcConfig: JdbcConfig = dbConfig()) = {
+    dbName: String = randomAlphanumeric(5)
+  ) = {
     new EnvironmentDefinition(
+      port,
       stub1Definition,
       stub2Definition,
-      jdbcConfig
+      DatabaseDefinition(
+        JdbcConfig(
+          Uri(s"jdbc:hsqldb:mem:$dbName"),
+          "sa",
+          "",
+          "SELECT 1"
+        )
+      )
     )
   }
-
-  def main(args: Array[String]) {
-    apply(
-      StubHttpServerFactory(Port(8081)),
-      StubHttpServerFactory(Port(8082)),
-      dbConfig("local")
-    ).using(awaitInterruption)
-  }
-
-  def dbConfig(dbName: String = RandomStringUtils.randomAlphanumeric(5)) = JdbcConfig(
-    Uri(s"jdbc:hsqldb:mem:$dbName"),
-    "sa",
-    "",
-    "SELECT 1"
-  )
 }
 
 class EnvironmentDefinition private (
+  port: ?[Port],
   stub1Definition: StubHttpServerFactory,
   stub2Definition: StubHttpServerFactory,
-  jdbcConfig: JdbcConfig
+  databaseDefinition: DatabaseDefinition
 ) extends ResourceFactory[Environment] {
+
+  def runUntilShutdown(): Unit = {
+    using(blockUntilShutdown)
+  }
 
   override def using[T](work: (Environment) => T): T = {
 
-    withAll(stub1Definition, stub2Definition) { (stub1, stub2) =>
+    withAll(
+      stub1Definition,
+      stub2Definition,
+      databaseDefinition
+    ) { (stub1, stub2, database) =>
 
       val config = ServerConfig(
         ApplicationConfig(
           sendGridUrl = stub1.localAddress,
           sendGridToken = "secret_token",
           contentfulUrl = stub2.localAddress,
-          jdbcConfig = jdbcConfig
+          jdbcConfig = databaseDefinition.config
         ),
-        localPort = None
+        localPort = port
       )
 
       ServerDefinition(config).using { application =>
-        work(Environment(stub1, stub2, application))
+        work(Environment(stub1, stub2, database, application))
       }
     }
   }

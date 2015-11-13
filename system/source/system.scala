@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch
 
 package object system {
 
-  val awaitInterruption = () => {
+  val blockUntilShutdown = () => {
 
     val latch = new CountDownLatch(1)
     val runningThread = Thread.currentThread()

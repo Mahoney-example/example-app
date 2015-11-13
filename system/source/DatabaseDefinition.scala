@@ -7,7 +7,7 @@ import java.util.logging.Logger
 import javax.sql.DataSource
 
 import net.Uri
-import scalalang.ResourceFactory
+import scalalang.{Reusable, ResourceFactory}
 
 object DatabaseDefinition {
 
@@ -16,31 +16,38 @@ object DatabaseDefinition {
   }
 }
 class DatabaseDefinition private (
-  config: JdbcConfig
+  val config: JdbcConfig
 ) extends ResourceFactory[Database] {
   override def using[T](work: (Database) => T): T = {
-    work.apply(new Database(new DataSource {override def getConnection: Connection = ???
+    work.apply(
+      new Database(
+        new DataSource {
+          override def getConnection: Connection = ???
 
-      override def getConnection(username: String, password: String): Connection = ???
+          override def getConnection(username: String, password: String): Connection = ???
 
-      override def unwrap[T](iface: Class[T]): T = ???
+          override def unwrap[T](iface: Class[T]): T = ???
 
-      override def isWrapperFor(iface: Class[_]): Boolean = ???
+          override def isWrapperFor(iface: Class[_]): Boolean = ???
 
-      override def setLogWriter(out: PrintWriter): Unit = ???
+          override def setLogWriter(out: PrintWriter): Unit = ???
 
-      override def getLoginTimeout: Int = ???
+          override def getLoginTimeout: Int = ???
 
-      override def setLoginTimeout(seconds: Int): Unit = ???
+          override def setLoginTimeout(seconds: Int): Unit = ???
 
-      override def getParentLogger: Logger = ???
+          override def getParentLogger: Logger = ???
 
-      override def getLogWriter: PrintWriter = ???
-    }))
+          override def getLogWriter: PrintWriter = ???
+        }
+      )
+    )
   }
 }
 
-class Database private[system] (dataSource: DataSource) extends DataSource {
+class Database private[system] (
+  dataSource: DataSource
+) extends DataSource with Reusable {
 
   override def getConnection = dataSource.getConnection
 

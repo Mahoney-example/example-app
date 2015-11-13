@@ -21,11 +21,11 @@ class ApplicationDefinition private (
   services: ?[Services]
 ) extends ResourceFactory[Application] with HasLogger {
 
-  override def withA[T](work: (Application) => T): T = {
+  override def using[T](work: (Application) => T): T = {
 
     services match {
       case None =>
-        DatabaseDefinition(config.jdbcConfig).withA { database =>
+        DatabaseDefinition(config.jdbcConfig).using { database =>
           val application = Application(
             config,
             Services(

@@ -30,7 +30,7 @@ object EnvironmentDefinition {
       StubHttpServerFactory(Port(8081)),
       StubHttpServerFactory(Port(8082)),
       dbConfig("local")
-    ).withA(awaitInterruption)
+    ).using(awaitInterruption)
   }
 
   def dbConfig(dbName: String = RandomStringUtils.randomAlphanumeric(5)) = JdbcConfig(
@@ -47,7 +47,7 @@ class EnvironmentDefinition private (
   jdbcConfig: JdbcConfig
 ) extends ResourceFactory[Environment] {
 
-  override def withA[T](work: (Environment) => T): T = {
+  override def using[T](work: (Environment) => T): T = {
 
     withAll(stub1Definition, stub2Definition) { (stub1, stub2) =>
 
@@ -61,7 +61,7 @@ class EnvironmentDefinition private (
         localPort = None
       )
 
-      ServerDefinition(config).withA { application =>
+      ServerDefinition(config).using { application =>
         work(Environment(stub1, stub2, application))
       }
     }

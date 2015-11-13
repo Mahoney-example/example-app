@@ -18,7 +18,7 @@ object DatabaseDefinition {
 class DatabaseDefinition private (
   config: JdbcConfig
 ) extends ResourceFactory[Database] {
-  override def withA[T](work: (Database) => T): T = {
+  override def using[T](work: (Database) => T): T = {
     work.apply(new Database(new DataSource {override def getConnection: Connection = ???
 
       override def getConnection(username: String, password: String): Connection = ???

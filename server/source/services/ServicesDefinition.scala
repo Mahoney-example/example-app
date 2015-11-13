@@ -4,6 +4,6 @@ import uk.org.lidalia.scalalang.ResourceFactory
 
 class ServicesDefinition extends ResourceFactory[Services] {
 
-  override def withA[T](work: (Services) => T): T = ???
+  override def using[T](work: (Services) => T): T = ???
 
 }

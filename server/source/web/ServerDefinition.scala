@@ -59,12 +59,12 @@ class ServerDefinition private (
   )
 
   def runUntilInterrupted(): Unit = {
-    withA(awaitInterruption)
+    using(awaitInterruption)
   }
 
-  override def withA[T](work: (Server) => T): T = {
+  override def using[T](work: (Server) => T): T = {
 
-    applicationDefinition.withA { application =>
+    applicationDefinition.using { application =>
 
       val server = Server(application, config)
 

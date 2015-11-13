@@ -17,11 +17,11 @@ class MemUserProfileService private () extends UserProfileService {
   private val profiles: mutable.Map[UserId, User] = mutable.Map()
 
   override def get(userId: UserId): ?[User] = {
-    lock.readLock.withA(() => profiles.get(userId))
+    lock.readLock.using(() => profiles.get(userId))
   }
 
   override def update(user: User): Unit = {
-    lock.writeLock.withA(() =>
+    lock.writeLock.using(() =>
       if (profiles.contains(user.id)) {
         profiles(user.id) = user
       } else {
@@ -31,7 +31,7 @@ class MemUserProfileService private () extends UserProfileService {
   }
 
   override def create(user: User): Unit = {
-    lock.writeLock.withA(() =>
+    lock.writeLock.using(() =>
       if (!profiles.contains(user.id)) {
         profiles(user.id) = user
       } else {

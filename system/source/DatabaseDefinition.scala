@@ -9,40 +9,10 @@ import javax.sql.DataSource
 import net.Uri
 import scalalang.{Reusable, ResourceFactory}
 
-object DatabaseDefinition {
+trait DatabaseDefinition extends ResourceFactory[Database] {
 
-  def apply(config: JdbcConfig) = {
-    new DatabaseDefinition(config)
-  }
-}
-class DatabaseDefinition private (
-  val config: JdbcConfig
-) extends ResourceFactory[Database] {
-  override def using[T](work: (Database) => T): T = {
-    work.apply(
-      new Database(
-        new DataSource {
-          override def getConnection: Connection = ???
+  val jdbcConfig: JdbcConfig
 
-          override def getConnection(username: String, password: String): Connection = ???
-
-          override def unwrap[T](iface: Class[T]): T = ???
-
-          override def isWrapperFor(iface: Class[_]): Boolean = ???
-
-          override def setLogWriter(out: PrintWriter): Unit = ???
-
-          override def getLoginTimeout: Int = ???
-
-          override def setLoginTimeout(seconds: Int): Unit = ???
-
-          override def getParentLogger: Logger = ???
-
-          override def getLogWriter: PrintWriter = ???
-        }
-      )
-    )
-  }
 }
 
 class Database private[system] (

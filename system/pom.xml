@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>uk.org.lidalia.exampleapp</groupId>
-  <artifactId>exampleapp-system</artifactId>
+  <artifactId>system</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
@@ -61,6 +61,11 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>${httpclient.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.3.3</version>
     </dependency>
 
     <!-- TEST -->
@@ -160,5 +165,5 @@
     </plugins>
   </build>
 
-    
+
 </project>

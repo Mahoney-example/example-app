@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>uk.org.lidalia.exampleapp</groupId>
-  <artifactId>exampleapp-tests</artifactId>
+  <artifactId>tests</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
@@ -29,17 +29,17 @@
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
-      <artifactId>exampleapp-local</artifactId>
+      <artifactId>local</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
-      <artifactId>exampleapp-server</artifactId>
+      <artifactId>server</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
-      <artifactId>exampleapp-system</artifactId>
+      <artifactId>system</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>

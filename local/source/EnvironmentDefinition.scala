@@ -5,7 +5,7 @@ package local
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import server.application.ApplicationConfig
 import server.web.{ServerDefinition, ServerConfig}
-import system.{blockUntilShutdown, DatabaseDefinition, JdbcConfig}
+import uk.org.lidalia.exampleapp.system.{HsqlDatabaseDefinition, blockUntilShutdown, DatabaseDefinition, JdbcConfig}
 import net.{Port, Uri}
 
 import scalalang.ResourceFactory
@@ -19,20 +19,13 @@ object EnvironmentDefinition {
     port: ?[Port] = None,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     stub2Definition: StubHttpServerFactory = StubHttpServerFactory(),
-    dbName: String = randomAlphanumeric(5)
+    databaseDefinition: HsqlDatabaseDefinition = HsqlDatabaseDefinition()
   ) = {
     new EnvironmentDefinition(
       port,
       stub1Definition,
       stub2Definition,
-      DatabaseDefinition(
-        JdbcConfig(
-          Uri(s"jdbc:hsqldb:mem:$dbName"),
-          "sa",
-          "",
-          "SELECT 1"
-        )
-      )
+      databaseDefinition
     )
   }
 }

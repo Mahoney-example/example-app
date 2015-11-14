@@ -4,6 +4,7 @@ package local
 
 import net.Port
 import stubhttp.StubHttpServerFactory
+import system.MemDatabaseDefinition
 
 object Main {
 
@@ -13,7 +14,7 @@ object Main {
       Port(8080),
       StubHttpServerFactory(Port(8081)),
       StubHttpServerFactory(Port(8082)),
-      "local"
+      MemDatabaseDefinition("local")
     )
 
     environment.runUntilShutdown()

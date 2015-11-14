@@ -5,7 +5,7 @@ package local
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import server.application.ApplicationConfig
 import server.web.{ServerDefinition, ServerConfig}
-import uk.org.lidalia.exampleapp.system.{HsqlDatabaseDefinition, blockUntilShutdown, DatabaseDefinition, JdbcConfig}
+import uk.org.lidalia.exampleapp.system.{MemDatabaseDefinition, blockUntilShutdown, DatabaseDefinition, JdbcConfig}
 import net.{Port, Uri}
 
 import scalalang.ResourceFactory
@@ -19,7 +19,7 @@ object EnvironmentDefinition {
     port: ?[Port] = None,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     stub2Definition: StubHttpServerFactory = StubHttpServerFactory(),
-    databaseDefinition: HsqlDatabaseDefinition = HsqlDatabaseDefinition()
+    databaseDefinition: DatabaseDefinition = MemDatabaseDefinition()
   ) = {
     new EnvironmentDefinition(
       port,
@@ -54,7 +54,7 @@ class EnvironmentDefinition private (
           sendGridUrl = stub1.localAddress,
           sendGridToken = "secret_token",
           contentfulUrl = stub2.localAddress,
-          jdbcConfig = databaseDefinition.config
+          jdbcConfig = databaseDefinition.jdbcConfig
         ),
         localPort = port
       )

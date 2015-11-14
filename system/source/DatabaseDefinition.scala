@@ -2,8 +2,6 @@ package uk.org.lidalia
 package exampleapp.system
 
 import java.io.PrintWriter
-import java.sql.Connection
-import java.util.logging.Logger
 import javax.sql.DataSource
 
 import net.Uri

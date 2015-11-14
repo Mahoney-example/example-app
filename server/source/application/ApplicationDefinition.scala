@@ -4,7 +4,7 @@ package exampleapp.server.application
 import uk.org.lidalia.exampleapp.server.services.Services
 import uk.org.lidalia.exampleapp.server.services.email.HttpEmailService
 import uk.org.lidalia.exampleapp.server.services.profiles.DbUserProfileService
-import uk.org.lidalia.exampleapp.system.{DatabaseDefinition, HasLogger}
+import uk.org.lidalia.exampleapp.system.{RemoteDatabaseDefinition, DatabaseDefinition, HasLogger}
 import uk.org.lidalia.scalalang.ResourceFactory
 
 object ApplicationDefinition {
@@ -25,7 +25,7 @@ class ApplicationDefinition private (
 
     services match {
       case None =>
-        DatabaseDefinition(config.jdbcConfig).using { database =>
+        RemoteDatabaseDefinition(config.jdbcConfig).using { database =>
           val application = Application(
             config,
             Services(

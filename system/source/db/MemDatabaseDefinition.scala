@@ -29,18 +29,32 @@ class MemDatabaseDefinition private (
     Uri(s"jdbc:hsqldb:mem:$name"),
     "sa",
     "",
-    "SELECT 1"
+    "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
   )
+
   override def using[T](work: (Database) => T): T = {
 
     val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, name, new HsqlProperties)
+    log.info(s"Created database $name")
 
     val database = Database(jdbcConfig)
 
+
     try {
+
+      database.using { connection =>
+        connection.createStatement().execute(
+          """
+            |SET DATABASE TRANSACTION CONTROL MVCC;
+            |SET FILES LOB SCALE 1;
+          """.stripMargin
+        )
+      }
+
       work(database)
     } finally {
       db.close(0)
+      log.info(s"Deleted database $name")
     }
   }
 }

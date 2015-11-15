@@ -5,6 +5,10 @@ package system.db
 import java.sql.Connection
 import javax.sql.DataSource
 
+import liquibase.changelog.DatabaseChangeLog
+import liquibase.database.DatabaseFactory
+import liquibase.database.jvm.JdbcConnection
+import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
 import uk.org.lidalia.scalalang.{Reusable, ResourceFactory}
 
 object Database {
@@ -27,6 +31,13 @@ class Database private (
       work(connection)
     } finally {
       connection.close()
+    }
+  }
+
+  def update(changelog: DatabaseChangeLog): Unit = {
+    using { connection =>
+      val liquibaseDb = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
+      Migrator(changelog, liquibaseDb).update()
     }
   }
 }

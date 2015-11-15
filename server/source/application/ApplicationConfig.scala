@@ -6,6 +6,5 @@ import uk.org.lidalia.net.Url
 case class ApplicationConfig (
   jdbcConfig: JdbcConfig,
   sendGridUrl: Url,
-  sendGridToken: String,
-  contentfulUrl: Url
+  sendGridToken: String
 )

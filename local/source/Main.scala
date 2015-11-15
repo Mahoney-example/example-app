@@ -13,7 +13,6 @@ object Main {
     val environment = EnvironmentDefinition(
       Port(8080),
       StubHttpServerFactory(Port(8081)),
-      StubHttpServerFactory(Port(8082)),
       MemDatabaseDefinition("local")
     )
 

@@ -6,7 +6,7 @@ import server.services.Services
 import server.services.email.HttpEmailService
 import server.services.profiles.DbUserProfileService
 import system.HasLogger
-import system.db.PooledDatabaseDefinition
+import uk.org.lidalia.exampleapp.system.db.{Database, PooledDatabaseDefinition}
 import scalalang.ResourceFactory
 
 object ApplicationDefinition {
@@ -38,6 +38,7 @@ class ApplicationDefinition private (
     services match {
       case None =>
         PooledDatabaseDefinition(config.jdbcConfig).using { database =>
+          initialise(database)
           run(Services(
             HttpEmailService(config.sendGridUrl, config.sendGridToken),
             DbUserProfileService(database)
@@ -45,5 +46,9 @@ class ApplicationDefinition private (
         }
       case Some(servs) => run(servs)
     }
+  }
+
+  def initialise(database: Database): Unit = {
+
   }
 }

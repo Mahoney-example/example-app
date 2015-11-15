@@ -1,10 +1,8 @@
 package uk.org.lidalia
 package exampleapp
 
-import java.sql.DriverManager
 
 import net.{Uri, Port, Url}
-import org.hsqldb.jdbc.JDBCDriver
 import server.application.ApplicationConfig
 import server.web.ServerDefinition
 import server.web.ServerConfig
@@ -35,18 +33,15 @@ object Main {
     env: Map[String, String]
   ): ServerConfig = {
 
-    DriverManager.registerDriver(new JDBCDriver)
-
     ServerConfig (
       ApplicationConfig(
         sendGridUrl = Url("http://www.example.com"),
         sendGridToken = "",
-        contentfulUrl = Url("http://www.disney.com"),
         jdbcConfig = JdbcConfig(
           Uri(s"jdbc:hsqldb:mem:local"),
           "sa",
           "",
-          "SELECT 1"
+          "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
         )
       ),
 

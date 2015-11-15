@@ -4,13 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>uk.org.lidalia.exampleapp</groupId>
   <artifactId>local</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
+  <parent>
+    <groupId>uk.org.lidalia.exampleapp</groupId>
+    <artifactId>example-app</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
   <properties>
-    <httpcore.version>4.3.3</httpcore.version>
-    <httpclient.version>4.3.6</httpclient.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <scala.version>2.11.7</scala.version>
@@ -23,34 +26,30 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>uk.org.lidalia</groupId>
+      <artifactId>lidalia-net</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
       <artifactId>system</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia</groupId>
-      <artifactId>lidalia-stubhttp</artifactId>
+      <artifactId>lidalia-scala-lang</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia</groupId>
-      <artifactId>lidalia-lang</artifactId>
+      <artifactId>application-logging-dependencies</artifactId>
+      <version>1.3.0</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.lidalia</groupId>
+      <artifactId>jul-to-slf4j-config</artifactId>
       <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.joda</groupId>
-      <artifactId>joda-convert</artifactId>
-      <version>1.6</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -58,57 +57,14 @@
       <version>${scala.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>${httpcore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>${httpclient.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock</artifactId>
-      <version>1.58</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.1.3</version>
-    </dependency>
-
-    <!-- TEST -->
-    <dependency>
-      <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_2.11</artifactId>
-      <version>1.12.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.11</artifactId>
-      <version>2.2.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>uk.org.lidalia</groupId>
-      <artifactId>lidalia-test-dependencies</artifactId>
-      <version>1.1.0</version>
-      <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.json</artifactId>
-      <version>1.0.4</version>
-      <scope>test</scope>
+      <artifactId>lidalia-stubhttp</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
   <build>
     <sourceDirectory>source</sourceDirectory>
-    <testSourceDirectory>tests</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
@@ -122,7 +78,6 @@
           <execution>
             <goals>
               <goal>compile</goal>
-              <goal>testCompile</goal>
             </goals>
           </execution>
         </executions>
@@ -139,35 +94,8 @@
           </dependency>
         </dependencies>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.18.1</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <!-- enable scalatest -->
-      <plugin>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest-maven-plugin</artifactId>
-        <version>1.0</version>
-        <configuration>
-          <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-          <junitxml>.</junitxml>
-          <filereports>WDF TestSuite.txt</filereports>
-        </configuration>
-        <executions>
-          <execution>
-            <id>test</id>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
-    
+
 </project>

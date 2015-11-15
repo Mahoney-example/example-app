@@ -6,13 +6,10 @@ package system.db
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
-import org.hsqldb.jdbc.JDBCDriver
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.net.Uri
 
 object MemDatabaseDefinition {
-
-  JDBCDriver.driverInstance
 
   def apply(
     name: String = randomAlphanumeric(5)

@@ -2,18 +2,13 @@ package uk.org.lidalia
 package exampleapp
 package server.application
 
-import liquibase.Liquibase
-import liquibase.changelog.DatabaseChangeLog
-import liquibase.database.DatabaseFactory
-import liquibase.database.jvm.JdbcConnection
-import liquibase.resource.ClassLoaderResourceAccessor
+import scalalang.ResourceFactory
 import server.services.Services
 import server.services.email.HttpEmailService
-import server.services.profiles.DbUserProfileService
+import server.services.profiles.{DbUserProfileService, userProfileTableCreation}
 import system.HasLogger
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
-import uk.org.lidalia.exampleapp.system.db.{DatabaseDefinition, JdbcConfig, Database, PooledDatabaseDefinition}
-import scalalang.ResourceFactory
+import system.db.changelog.Migrator.changeLog
+import system.db.PooledDatabaseDefinition
 
 object ApplicationDefinition {
   def apply(
@@ -44,7 +39,9 @@ class ApplicationDefinition private (
     services match {
       case None =>
         PooledDatabaseDefinition(config.jdbcConfig).using { database =>
-          database.update(changelog)
+          database.update(changeLog(
+            userProfileTableCreation
+          ))
           run(Services(
             HttpEmailService(config.sendGridUrl, config.sendGridToken),
             DbUserProfileService(database)
@@ -54,7 +51,4 @@ class ApplicationDefinition private (
     }
   }
 
-  private lazy val changelog: DatabaseChangeLog = {
-
   }
-}

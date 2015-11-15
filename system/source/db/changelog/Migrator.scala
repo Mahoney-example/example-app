@@ -87,6 +87,6 @@ class Migrator private (
 
   override def getDatabaseChangeLog = changelog
 
-  def update() = update("migration")
+  def update(): Unit = update("migration")
 
 }

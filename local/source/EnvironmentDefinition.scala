@@ -2,11 +2,11 @@ package uk.org.lidalia
 package exampleapp
 package local
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import server.application.ApplicationConfig
 import server.web.{ServerDefinition, ServerConfig}
-import uk.org.lidalia.exampleapp.system.{MemDatabaseDefinition, blockUntilShutdown, DatabaseDefinition, JdbcConfig}
-import net.{Port, Uri}
+import system.db.{MemDatabaseDefinition, DatabaseDefinition}
+import system.blockUntilShutdown
+import net.Port
 
 import scalalang.ResourceFactory
 import ResourceFactory.withAll

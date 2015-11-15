@@ -1,15 +1,16 @@
 package uk.org.lidalia
-package exampleapp.server.services.profiles
+package exampleapp
+package server.services.profiles
 
-import javax.sql.DataSource
+import system.db.Database
 
 object DbUserProfileService {
 
-  def apply(dataSource: DataSource) = new DbUserProfileService(dataSource)
+  def apply(database: Database) = new DbUserProfileService(database)
 }
 
 class DbUserProfileService private (
-  dataSource: DataSource
+  database: Database
 ) extends UserProfileService {
 
   override def get(userId: UserId): ?[User] = ???

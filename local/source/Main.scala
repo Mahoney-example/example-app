@@ -4,7 +4,7 @@ package local
 
 import net.Port
 import stubhttp.StubHttpServerFactory
-import system.MemDatabaseDefinition
+import system.db.MemDatabaseDefinition
 
 object Main {
 

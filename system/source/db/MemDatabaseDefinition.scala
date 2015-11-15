@@ -1,16 +1,18 @@
 package uk.org.lidalia
 package exampleapp
-package system
+package system.db
 
-import java.sql.DriverManager
 
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
-import org.hsqldb.jdbc.{JDBCDataSource, JDBCDriver}
+import org.hsqldb.jdbc.JDBCDriver
+import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.net.Uri
 
 object MemDatabaseDefinition {
+
+  JDBCDriver.driverInstance
 
   def apply(
     name: String = randomAlphanumeric(5)
@@ -21,7 +23,7 @@ object MemDatabaseDefinition {
 
 class MemDatabaseDefinition private (
   name: String
-) extends DatabaseDefinition {
+) extends DatabaseDefinition with HasLogger {
 
   override val jdbcConfig = JdbcConfig(
     Uri(s"jdbc:hsqldb:mem:$name"),
@@ -30,16 +32,11 @@ class MemDatabaseDefinition private (
     "SELECT 1"
   )
   override def using[T](work: (Database) => T): T = {
+
     val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, name, new HsqlProperties)
 
-    DriverManager.registerDriver(new JDBCDriver())
+    val database = Database(jdbcConfig)
 
-    val dataSource = new JDBCDataSource
-    dataSource.setUrl(jdbcConfig.jdbcUrl.toString)
-    dataSource.setUser(jdbcConfig.username)
-    dataSource.setPassword(jdbcConfig.password)
-
-    val database = new Database(dataSource)
     try {
       work(database)
     } finally {

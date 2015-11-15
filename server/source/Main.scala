@@ -8,7 +8,7 @@ import org.hsqldb.jdbc.JDBCDriver
 import server.application.ApplicationConfig
 import server.web.ServerDefinition
 import server.web.ServerConfig
-import system.JdbcConfig
+import system.db.JdbcConfig
 
 import collection.immutable
 import collection.JavaConversions.mapAsScalaMap

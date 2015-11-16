@@ -9,7 +9,7 @@ import liquibase.changelog.DatabaseChangeLog
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
 import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
-import uk.org.lidalia.scalalang.{Reusable, ResourceFactory}
+import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
 
 object Database {
 

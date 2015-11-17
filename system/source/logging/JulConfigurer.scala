@@ -9,9 +9,9 @@ import org.slf4j.bridge.SLF4JBridgeHandler
 
 import scala.collection.JavaConversions.enumerationAsScalaIterator
 
-object JuliConfigurer {
+object JulConfigurer {
 
-  def sendJuliToSlf4j() = {
+  def sendJulToSlf4j() = {
     val manager = LogManager.getLogManager
     val loggers = manager.getLoggerNames.toIterable.map(manager.getLogger)
     loggers.foreach { logger =>

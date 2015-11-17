@@ -8,6 +8,7 @@ import ch.qos.logback.classic.{Level, LoggerContext}
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
 import ch.qos.logback.core.{AsyncAppenderBase, ConsoleAppender, UnsynchronizedAppenderBase}
 import org.slf4j.{Logger, LoggerFactory}
+import uk.org.lidalia.exampleapp.system.logging.JulConfigurer.sendJulToSlf4j
 
 object LogbackConfigurer {
 
@@ -15,7 +16,7 @@ object LogbackConfigurer {
 
   def configureLogback(applicationPackage: String) = {
 
-    JuliConfigurer.sendJuliToSlf4j()
+    sendJulToSlf4j()
 
     logFactory.addListener(started(new LevelChangePropagator))
 

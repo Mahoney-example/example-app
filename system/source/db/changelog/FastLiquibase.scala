@@ -25,7 +25,7 @@ import liquibase.structure.core.{Catalog, Column, Data, ForeignKey, Index, Prima
 
 object FastLiquibase {
 
-  ServiceLocator.setInstance(new FastServiceLocator)
+  def apply() = ServiceLocator.setInstance(new FastServiceLocator)
 
 }
 class FastServiceLocator extends ServiceLocator {

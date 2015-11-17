@@ -6,12 +6,12 @@ import db.changelog.FastLiquibase
 import net.Port
 import stubhttp.StubHttpServerFactory
 import system.db.MemDatabaseDefinition
-import system.logging.LogbackConfigurer
+import system.logging.LogbackConfigurer.configureLogback
 
 object Main {
 
-  LogbackConfigurer.configureLogback("uk.org.lidalia.exampleapp")
-  FastLiquibase
+  configureLogback("uk.org.lidalia.exampleapp")
+  FastLiquibase()
 
   def main(args: Array[String]) {
 

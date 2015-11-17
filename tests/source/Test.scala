@@ -3,12 +3,12 @@ package uk.org.lidalia.exampleapp.tests.functional
 import db.changelog.FastLiquibase
 import uk.org.lidalia.exampleapp.local.EnvironmentDefinition
 import uk.org.lidalia.exampleapp.system.HasLogger
-import uk.org.lidalia.exampleapp.system.logging.JuliConfigurer
+import uk.org.lidalia.exampleapp.system.logging.JuliConfigurer.sendJuliToSlf4j
 
 object Test extends HasLogger {
 
-  JuliConfigurer.sendJuliToSlf4j()
-  FastLiquibase
+  sendJuliToSlf4j()
+  FastLiquibase()
 
   def main(args: Array[String]) {
 

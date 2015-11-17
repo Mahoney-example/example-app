@@ -7,12 +7,15 @@ import server.application.ApplicationConfig
 import server.web.ServerDefinition
 import server.web.ServerConfig
 import system.db.JdbcConfig
+import system.logging.LogbackConfigurer
 
 import collection.immutable
 import collection.JavaConversions.mapAsScalaMap
 import collection.JavaConversions.propertiesAsScalaMap
 
 object Main {
+
+  LogbackConfigurer.configureLogback("uk.org.lidalia.exampleapp")
 
   def main(args: Array[String]) {
 

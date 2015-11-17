@@ -5,9 +5,8 @@ package server.application
 import scalalang.ResourceFactory
 import server.services.Services
 import server.services.email.HttpEmailService
-import server.services.profiles.{DbUserProfileService, userProfileTableCreation}
+import server.services.profiles.DbUserProfileService
 import system.HasLogger
-import system.db.changelog.Migrator.changeLog
 import system.db.PooledDatabaseDefinition
 
 object ApplicationDefinition {
@@ -39,9 +38,6 @@ class ApplicationDefinition private (
     services match {
       case None =>
         PooledDatabaseDefinition(config.jdbcConfig).using { database =>
-          database.update(changeLog(
-            userProfileTableCreation
-          ))
           run(Services(
             HttpEmailService(config.sendGridUrl, config.sendGridToken),
             DbUserProfileService(database)
@@ -50,5 +46,4 @@ class ApplicationDefinition private (
       case Some(servs) => run(servs)
     }
   }
-
-  }
+}

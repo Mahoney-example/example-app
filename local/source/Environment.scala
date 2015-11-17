@@ -8,9 +8,10 @@ import uk.org.lidalia.stubhttp.StubHttpServer
 case class Environment (
   stub1: StubHttpServer,
   database: Database,
-  server: Server
+  server1: Server,
+  server2: Server
 ) extends Reusable {
 
-  override def reset() = List(stub1, database, server).foreach(_.reset())
+  override def reset() = List(stub1, database, server1, server2).foreach(_.reset())
 
 }

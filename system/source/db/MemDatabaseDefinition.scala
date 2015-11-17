@@ -22,7 +22,7 @@ class MemDatabaseDefinition private (
   name: String
 ) extends DatabaseDefinition with HasLogger {
 
-  override val jdbcConfig = JdbcConfig(
+  private val jdbcConfig = JdbcConfig(
     Uri(s"jdbc:hsqldb:mem:$name"),
     "sa",
     "",

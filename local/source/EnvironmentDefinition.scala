@@ -3,33 +3,48 @@ package exampleapp
 package local
 
 import server.application.ApplicationConfig
+import server.services.profiles.userProfileTableCreation
 import server.web.{ServerDefinition, ServerConfig}
-import system.db.{MemDatabaseDefinition, DatabaseDefinition}
+import system.db.changelog.Migrator.changeLog
+import system.db.{Database, MemDatabaseDefinition, DatabaseDefinition}
 import system.blockUntilShutdown
 import net.Port
 
 import scalalang.ResourceFactory
-import ResourceFactory.withAll
+import ResourceFactory.usingAll
 
 import uk.org.lidalia.stubhttp.StubHttpServerFactory
 
 object EnvironmentDefinition {
 
   def apply(
-    port: ?[Port] = None,
+    port1: ?[Port] = None,
+    port2: ?[Port] = None,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     databaseDefinition: DatabaseDefinition = MemDatabaseDefinition()
   ) = {
+
+    val initialisingDbDefinition = new DatabaseDefinition {
+      override def using[T](work: (Database) => T): T = {
+        databaseDefinition.using { database =>
+          database.update(changeLog(userProfileTableCreation))
+          work(database)
+        }
+      }
+    }
+
     new EnvironmentDefinition(
-      port,
+      port1,
+      port2,
       stub1Definition,
-      databaseDefinition
+      initialisingDbDefinition
     )
   }
 }
 
 class EnvironmentDefinition private (
-  port: ?[Port],
+  port1: ?[Port],
+  port2: ?[Port],
   stub1Definition: StubHttpServerFactory,
   databaseDefinition: DatabaseDefinition
 ) extends ResourceFactory[Environment] {
@@ -40,22 +55,32 @@ class EnvironmentDefinition private (
 
   override def using[T](work: (Environment) => T): T = {
 
-    withAll(
+    usingAll(
       stub1Definition,
       databaseDefinition
     ) { (stub1, database) =>
 
-      val config = ServerConfig(
-        ApplicationConfig(
-          sendGridUrl = stub1.localAddress,
-          sendGridToken = "secret_token",
-          jdbcConfig = databaseDefinition.jdbcConfig
-        ),
-        localPort = port
+      val appConfig = ApplicationConfig(
+        sendGridUrl = stub1.localAddress,
+        sendGridToken = "secret_token",
+        jdbcConfig = database.jdbcConfig
+      )
+      val config1 = ServerConfig(
+        appConfig,
+        localPort = port1
+      )
+      val config2 = ServerConfig(
+        appConfig,
+        localPort = port2
       )
 
-      ServerDefinition(config).using { application =>
-        work(Environment(stub1, database, application))
+      usingAll(ServerDefinition(config1), ServerDefinition(config2)) { (server1, server2) =>
+        work(Environment(
+          stub1,
+          database,
+          server1,
+          server2
+        ))
       }
     }
   }

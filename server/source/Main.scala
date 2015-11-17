@@ -41,14 +41,14 @@ object Main {
         sendGridUrl = Url("http://www.example.com"),
         sendGridToken = "",
         jdbcConfig = JdbcConfig(
-          Uri(s"jdbc:hsqldb:mem:local"),
+          Uri("jdbc:postgresql:local"),
           "sa",
           "",
-          "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
+          "SELECT 1"
         )
       ),
 
-      localPort = Port(80)
+      localPort = Port(8080)
     )
   }
 }

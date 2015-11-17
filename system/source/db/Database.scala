@@ -13,13 +13,14 @@ import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
 
 object Database {
 
-  def apply(config: JdbcConfig): Database = apply(DriverManagerDataSource(config))
+  def apply(config: JdbcConfig): Database = apply(config, DriverManagerDataSource(config))
 
-  def apply(dataSource: DataSource): Database = new Database(dataSource)
+  def apply(config: JdbcConfig, dataSource: DataSource): Database = new Database(config, dataSource)
 
 }
 
 class Database private (
+  val jdbcConfig: JdbcConfig,
   val dataSource: DataSource
 ) extends Reusable with ResourceFactory[Connection] {
 

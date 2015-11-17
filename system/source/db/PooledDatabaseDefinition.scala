@@ -11,7 +11,7 @@ object PooledDatabaseDefinition {
 }
 
 class PooledDatabaseDefinition private (
-  override val jdbcConfig: JdbcConfig
+  jdbcConfig: JdbcConfig
 ) extends DatabaseDefinition {
 
   override def using[T](work: (Database) => T): T = {
@@ -19,8 +19,10 @@ class PooledDatabaseDefinition private (
     val ds = new HikariDataSource()
     ds.setJdbcUrl(jdbcConfig.jdbcUrl.toString)
     ds.setUsername(jdbcConfig.username)
+    ds.setPassword(jdbcConfig.password)
+    ds.setConnectionTestQuery(jdbcConfig.checkQuery)
 
-    val db = Database(ds)
+    val db = Database(jdbcConfig, ds)
 
     try {
       work(db)

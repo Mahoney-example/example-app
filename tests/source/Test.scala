@@ -14,7 +14,7 @@ object Test extends HasLogger {
 
     val start = System.currentTimeMillis()
     EnvironmentDefinition().using { environment =>
-      log.info(s"Running a test against server on port ${environment.server.localPort} $environment")
+      log.info(s"Running a test against server on port ${environment.server1.localPort} $environment")
     }
     println("Done in "+(System.currentTimeMillis() - start))
   }

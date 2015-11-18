@@ -6,20 +6,37 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.jul.LevelChangePropagator
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.{Level, LoggerContext}
+import ch.qos.logback.core.{UnsynchronizedAppenderBase, AsyncAppenderBase, ConsoleAppender}
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
-import ch.qos.logback.core.status.{OnErrorConsoleStatusListener, OnConsoleStatusListener}
-import ch.qos.logback.core.{AsyncAppenderBase, ConsoleAppender, UnsynchronizedAppenderBase}
-import org.slf4j.{Logger, LoggerFactory}
-import uk.org.lidalia.exampleapp.system.logging.JulConfigurer.sendJulToSlf4j
+import ch.qos.logback.core.status.OnErrorConsoleStatusListener
+import org.slf4j.Logger
+import scalalang.ResourceFactory
 
-object LogbackConfigurer {
+object LogbackLoggingDefinition {
 
-  private val logFactory = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+  def apply(
+    loggerLevels: (String, Level)*
+  ): LogbackLoggingDefinition = {
+    apply(new LoggerContext, loggerLevels:_*)
+  }
 
-  def configureLogback(loggerLevels: (String, Level)*) = {
+  def apply(
+    logFactory: LoggerContext,
+    loggerLevels: (String, Level)*
+  ): LogbackLoggingDefinition = {
+    new LogbackLoggingDefinition(logFactory, loggerLevels.toList)
+  }
+}
 
-    sendJulToSlf4j()
+class LogbackLoggingDefinition private (
+  logFactory: LoggerContext,
+  loggerLevels: List[(String, Level)]
+) extends ResourceFactory[LogbackLoggerFactory] {
+
+  override def using[T](work: (LogbackLoggerFactory) => T): T = {
+
     logFactory.getStatusManager.add(started(new OnErrorConsoleStatusListener))
+    logFactory.start()
     logFactory.addListener(started(new LevelChangePropagator))
 
     val root = logFactory.getLogger(Logger.ROOT_LOGGER_NAME)
@@ -52,6 +69,12 @@ object LogbackConfigurer {
     loggerLevels.foreach {
       case (loggerName, level) => logFactory.getLogger(loggerName).setLevel(level)
     }
+
+    try {
+      work(new LogbackLoggerFactory(logFactory))
+    } finally {
+      logFactory.stop()
+    }
   }
 
   private def consoleAppender(target: String) = {
@@ -73,4 +96,12 @@ object LogbackConfigurer {
     thing.start()
     thing
   }
+}
+
+class LogbackLoggerFactory(
+  context: LoggerContext
+) extends LoggerFactory[ch.qos.logback.classic.Logger] {
+
+  override def getLogger(name: String) = context.getLogger(name)
+
 }

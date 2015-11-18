@@ -2,6 +2,7 @@ package uk.org.lidalia
 package exampleapp
 
 
+import ch.qos.logback.classic.Level
 import net.{Uri, Port, Url}
 import server.application.ApplicationConfig
 import server.web.ServerDefinition
@@ -15,7 +16,9 @@ import collection.JavaConversions.propertiesAsScalaMap
 
 object Main {
 
-  configureLogback("uk.org.lidalia.exampleapp")
+  configureLogback(
+    "uk.org.lidalia.exampleapp" -> Level.INFO
+  )
 
   def main(args: Array[String]) {
 

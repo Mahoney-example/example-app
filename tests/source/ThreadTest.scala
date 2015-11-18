@@ -1,6 +1,12 @@
+import java.lang.Thread.UncaughtExceptionHandler
 import java.util
 
+import org.slf4j.{Logger, LoggerFactory}
+import uk.org.lidalia.exampleapp.system.logging.LogbackConfigurer
+
 object ThreadTest {
+
+  LogbackConfigurer.configureLogback()
 
   def main(args: Array[String]) {
 
@@ -10,15 +16,11 @@ object ThreadTest {
   def subCall(): Unit = {
     val thread = new ChildThread {
       override def run() = {
-        Thread.sleep(3000L)
-        val exception = new Exception
-        exception.setStackTrace(getStackTrace)
-        throw exception
+        throw new Exception
       }
     }
     thread.start()
-    Thread.sleep(1000L)
-    println(thread.getStackTrace.toList)
+    thread.join()
   }
 }
 
@@ -27,16 +29,21 @@ class ChildThread extends Thread {
 
   var parentStack: Option[Array[StackTraceElement]] = None
 
+  setUncaughtExceptionHandler(new UncaughtExceptionHandler {
+    override def uncaughtException(t: Thread, e: Throwable): Unit = {
+      val fullStack = Array.concat(e.getStackTrace, t.asInstanceOf[ChildThread].parentStack.get)
+      e.setStackTrace(fullStack)
+      LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME).error("Uncaught exception in thread {}", t, e: Any)
+    }
+  })
+
   override def start(): Unit = {
     val trace = Thread.currentThread().getStackTrace
-    println("Original parentStack = "+trace.toList)
     parentStack = Some(util.Arrays.copyOfRange(trace, 2, trace.length))
-    println("Set parentStack to "+parentStack.map(_.toList))
     super.start()
   }
 
   override def getStackTrace: Array[StackTraceElement] = {
-    println("parentStack is "+parentStack.map(_.toList))
     parentStack match {
       case None => super.getStackTrace
       case Some(parentElements) => Array.concat(super.getStackTrace, parentElements)

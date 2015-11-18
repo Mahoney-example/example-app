@@ -5,7 +5,7 @@ package logging
 import org.slf4j.{Logger, ILoggerFactory}
 import scalalang.{ResourceFactory, Reusable}
 
-trait LoggerFactory[T <: Logger] extends ILoggerFactory with Reusable {
+trait LoggerFactory[+T <: Logger] extends ILoggerFactory with Reusable {
   def getLogger(name: String): T
   def getLogger(forClass: Class[_]): T = getLogger(forClass.getName)
 }

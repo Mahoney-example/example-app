@@ -8,7 +8,7 @@ import server.application.ApplicationConfig
 import server.web.ServerDefinition
 import server.web.ServerConfig
 import system.db.JdbcConfig
-import system.logging.LogbackConfigurer.configureLogback
+import system.logging.LogbackLoggingDefinition
 
 import collection.immutable
 import collection.JavaConversions.mapAsScalaMap
@@ -16,21 +16,22 @@ import collection.JavaConversions.propertiesAsScalaMap
 
 object Main {
 
-  configureLogback(
-    "uk.org.lidalia.exampleapp" -> Level.INFO
-  )
-
   def main(args: Array[String]) {
 
-    val config = configFor(
-      args.toVector,
-      System.getProperties.toMap,
-      System.getenv().toMap
-    )
+    LogbackLoggingDefinition(
+      "uk.org.lidalia.exampleapp" -> Level.INFO
+    ).using { loggerFactory =>
 
-    val server = ServerDefinition(config)
+      val config = configFor(
+        args.toVector,
+        System.getProperties.toMap,
+        System.getenv().toMap
+      )
 
-    server.runUntilShutdown()
+      val server = ServerDefinition(config, loggerFactory)
+
+      server.runUntilShutdown()
+    }
   }
 
   private def configFor(

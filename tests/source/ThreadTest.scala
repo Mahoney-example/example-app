@@ -2,15 +2,14 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.util
 
 import org.slf4j.{Logger, LoggerFactory}
-import uk.org.lidalia.exampleapp.system.logging.LogbackConfigurer
+import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 
 object ThreadTest {
 
-  LogbackConfigurer.configureLogback()
-
   def main(args: Array[String]) {
-
-    subCall()
+    LogbackLoggingDefinition().using { () =>
+      subCall()
+    }
   }
 
   def subCall(): Unit = {

@@ -2,22 +2,29 @@ package uk.org.lidalia
 package exampleapp
 package server.web
 
+import org.slf4j.Logger
 import scalalang.ResourceFactory
 import server.application.ApplicationDefinition
 import system.blockUntilShutdown
+import system.logging.LoggerFactory
 
 object ServerDefinition {
 
-  def apply(config: ServerConfig) = new ServerDefinition(config)
+  def apply(
+    config: ServerConfig,
+    loggerFactory: LoggerFactory[Logger]
+  ) = new ServerDefinition(config, loggerFactory)
 
 }
 
 class ServerDefinition private (
-  config: ServerConfig
+  config: ServerConfig,
+  loggerFactory: LoggerFactory[Logger]
 ) extends ResourceFactory[Server] {
 
   val applicationDefinition = ApplicationDefinition(
-    config.applicationConfig
+    config.applicationConfig,
+    loggerFactory
   )
 
   def runUntilShutdown(): Unit = {

@@ -2,6 +2,7 @@ package uk.org.lidalia
 package exampleapp
 package local
 
+import org.slf4j.Logger
 import server.application.ApplicationConfig
 import server.services.profiles.userProfileTableCreation
 import server.web.{ServerDefinition, ServerConfig}
@@ -12,6 +13,7 @@ import net.Port
 
 import scalalang.ResourceFactory
 import ResourceFactory.usingAll
+import system.logging.{StaticLoggerFactory, LoggerFactory}
 
 import uk.org.lidalia.stubhttp.StubHttpServerFactory
 
@@ -19,7 +21,9 @@ object EnvironmentDefinition {
 
   def apply(
     port1: ?[Port] = None,
+    loggerFactory1: LoggerFactory[Logger] = StaticLoggerFactory,
     port2: ?[Port] = None,
+    loggerFactory2: LoggerFactory[Logger] = StaticLoggerFactory,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     databaseDefinition: DatabaseDefinition = MemDatabaseDefinition()
   ) = {
@@ -35,7 +39,9 @@ object EnvironmentDefinition {
 
     new EnvironmentDefinition(
       port1,
+      loggerFactory1,
       port2,
+      loggerFactory2,
       stub1Definition,
       initialisingDbDefinition
     )
@@ -44,7 +50,9 @@ object EnvironmentDefinition {
 
 class EnvironmentDefinition private (
   port1: ?[Port],
+  loggerFactory1: LoggerFactory[Logger],
   port2: ?[Port],
+  loggerFactory2: LoggerFactory[Logger],
   stub1Definition: StubHttpServerFactory,
   databaseDefinition: DatabaseDefinition
 ) extends ResourceFactory[Environment] {
@@ -74,7 +82,7 @@ class EnvironmentDefinition private (
         localPort = port2
       )
 
-      usingAll(ServerDefinition(config1), ServerDefinition(config2)) { (server1, server2) =>
+      usingAll(ServerDefinition(config1, loggerFactory1), ServerDefinition(config2, loggerFactory2)) { (server1, server2) =>
         work(Environment(
           stub1,
           database,

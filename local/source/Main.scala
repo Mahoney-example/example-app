@@ -28,9 +28,7 @@ object Main {
 
     logbackLoggingDefinition.using { loggerFactory =>
       val environment = EnvironmentDefinition(
-        Port(8080),
-        loggerFactory,
-        Port(8081),
+        List(Port(8080)),
         loggerFactory,
         StubHttpServerFactory(Port(8082)),
         MemDatabaseDefinition("local")

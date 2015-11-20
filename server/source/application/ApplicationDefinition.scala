@@ -9,12 +9,12 @@ import server.services.email.HttpEmailService
 import server.services.profiles.DbUserProfileService
 import system.HasLogger
 import system.db.PooledDatabaseDefinition
-import system.logging.LoggerFactory
+import system.logging.{StaticLoggerFactory, LoggerFactory}
 
 object ApplicationDefinition {
   def apply(
     config: ApplicationConfig,
-    loggerFactory: LoggerFactory[Logger],
+    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
     services: ?[Services] = None
   ) = {
     new ApplicationDefinition(config, loggerFactory, services)

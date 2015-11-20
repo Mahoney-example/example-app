@@ -20,10 +20,8 @@ import uk.org.lidalia.stubhttp.StubHttpServerFactory
 object EnvironmentDefinition {
 
   def apply(
-    port1: ?[Port] = None,
-    loggerFactory1: LoggerFactory[Logger] = StaticLoggerFactory,
-    port2: ?[Port] = None,
-    loggerFactory2: LoggerFactory[Logger] = StaticLoggerFactory,
+    ports: List[?[Port]] = List(None),
+    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     databaseDefinition: DatabaseDefinition = MemDatabaseDefinition()
   ) = {
@@ -38,10 +36,8 @@ object EnvironmentDefinition {
     }
 
     new EnvironmentDefinition(
-      port1,
-      loggerFactory1,
-      port2,
-      loggerFactory2,
+      ports,
+      loggerFactory,
       stub1Definition,
       initialisingDbDefinition
     )
@@ -49,10 +45,8 @@ object EnvironmentDefinition {
 }
 
 class EnvironmentDefinition private (
-  port1: ?[Port],
-  loggerFactory1: LoggerFactory[Logger],
-  port2: ?[Port],
-  loggerFactory2: LoggerFactory[Logger],
+  ports: List[?[Port]],
+  loggerFactory: LoggerFactory[Logger],
   stub1Definition: StubHttpServerFactory,
   databaseDefinition: DatabaseDefinition
 ) extends ResourceFactory[Environment] {
@@ -73,21 +67,14 @@ class EnvironmentDefinition private (
         sendGridToken = "secret_token",
         jdbcConfig = database.jdbcConfig
       )
-      val config1 = ServerConfig(
-        appConfig,
-        localPort = port1
-      )
-      val config2 = ServerConfig(
-        appConfig,
-        localPort = port2
-      )
 
-      usingAll(ServerDefinition(config1, loggerFactory1), ServerDefinition(config2, loggerFactory2)) { (server1, server2) =>
+      val serverDefinitions = ports.map(port => ServerDefinition(ServerConfig(appConfig, port), loggerFactory))
+
+      usingAll(serverDefinitions:_*) { servers =>
         work(Environment(
           stub1,
           database,
-          server1,
-          server2
+          servers
         ))
       }
     }

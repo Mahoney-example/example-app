@@ -6,13 +6,13 @@ import org.slf4j.Logger
 import scalalang.ResourceFactory
 import server.application.ApplicationDefinition
 import system.blockUntilShutdown
-import system.logging.LoggerFactory
+import system.logging.{StaticLoggerFactory, LoggerFactory}
 
 object ServerDefinition {
 
   def apply(
     config: ServerConfig,
-    loggerFactory: LoggerFactory[Logger]
+    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory
   ) = new ServerDefinition(config, loggerFactory)
 
 }

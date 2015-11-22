@@ -14,17 +14,23 @@ object Main {
 
     LogbackLoggingDefinition(
       "uk.org.lidalia.exampleapp" -> Level.INFO
-    ).using { () =>
+    ).using { loggerFactory =>
 
-      val config = Configuration(
-        args.toVector,
-        System.getProperties.toMap,
-        System.getenv().toMap
-      )
+      try {
 
-      val server = ServerDefinition(config)
+        val config = Configuration(
+          args.toVector,
+          System.getProperties.toMap,
+          System.getenv().toMap
+        )
 
-      server.runUntilShutdown()
+        val server = ServerDefinition(config)
+
+        server.runUntilShutdown()
+
+      } catch {
+        case e: Throwable => loggerFactory.getLogger(getClass).error("Unexpected exception running server", e)
+      }
     }
   }
 }

@@ -8,9 +8,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.{Level, LoggerContext}
 import ch.qos.logback.core.{UnsynchronizedAppenderBase, AsyncAppenderBase, ConsoleAppender}
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
-import ch.qos.logback.core.status.OnErrorConsoleStatusListener
 import org.slf4j.Logger
 import scalalang.ResourceFactory
+import uk.org.lidalia.scalalang.ResourceFactory._try
 
 object LogbackLoggingDefinition {
 
@@ -35,12 +35,11 @@ class LogbackLoggingDefinition private (
 
   override def using[T](work: (LogbackLoggerFactory) => T): T = {
 
-    logFactory.getStatusManager.add(started(new OnErrorConsoleStatusListener))
-    logFactory.start()
-    logFactory.addListener(started(new LevelChangePropagator))
+    logFactory.reset()
 
     val root = logFactory.getLogger(Logger.ROOT_LOGGER_NAME)
     root.setLevel(Level.WARN)
+    root.detachAndStopAllAppenders()
 
     val asyncConsoleAppender = new AsyncAppenderBase[ILoggingEvent] {
       override def preprocess(eventObject: ILoggingEvent): Unit = eventObject.prepareForDeferredProcessing()
@@ -66,13 +65,16 @@ class LogbackLoggingDefinition private (
     root.detachAndStopAllAppenders()
     root.addAppender(started(asyncConsoleAppender))
 
+    logFactory.addListener(started(new LevelChangePropagator))
+
     loggerLevels.foreach {
       case (loggerName, level) => logFactory.getLogger(loggerName).setLevel(level)
     }
+    logFactory.start()
 
-    try {
+    _try {
       work(new LogbackLoggerFactory(logFactory))
-    } finally {
+    } _finally  {
       logFactory.stop()
     }
   }

@@ -5,6 +5,7 @@ import java.net.ServerSocket
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.server.application.Application
 import uk.org.lidalia.scalalang.Reusable
+import uk.org.lidalia.scalalang.ResourceFactory._try
 import uk.org.lidalia.net.Port
 
 case class Server(
@@ -27,9 +28,9 @@ case class Server(
 
   private def randomPort: Port = {
     val socket = new ServerSocket(0)
-    try {
+    _try {
       Port(socket.getLocalPort)
-    } finally {
+    } _finally {
       socket.close()
     }
   }

@@ -4,6 +4,7 @@ package server.web
 
 import org.slf4j.Logger
 import scalalang.ResourceFactory
+import ResourceFactory._try
 import server.application.ApplicationDefinition
 import system.blockUntilShutdown
 import system.logging.{StaticLoggerFactory, LoggerFactory}
@@ -37,10 +38,10 @@ class ServerDefinition private (
 
       val server = Server(application, config)
 
-      try {
+      _try {
         server.start()
         work(server)
-      } finally {
+      } _finally {
         server.stop()
       }
     }

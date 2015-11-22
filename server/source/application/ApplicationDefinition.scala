@@ -4,6 +4,7 @@ package server.application
 
 import org.slf4j.Logger
 import scalalang.ResourceFactory
+import scalalang.ResourceFactory._try
 import server.services.Services
 import server.services.email.HttpEmailService
 import server.services.profiles.DbUserProfileService
@@ -31,10 +32,10 @@ class ApplicationDefinition private (
 
     def run(servs: Services): T = {
       val application = Application(config, loggerFactory, servs)
-      try {
+      _try {
         log.info(s"Application started: $application")
         work(application)
-      } finally {
+      } _finally {
         log.info(s"Application stopped: $application")
       }
     }

@@ -2,12 +2,12 @@ package uk.org.lidalia
 package exampleapp
 package system.db
 
-
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.net.Uri
+import uk.org.lidalia.scalalang.ResourceFactory._try
 
 object MemDatabaseDefinition {
 
@@ -37,7 +37,7 @@ class MemDatabaseDefinition private (
     val database = Database(jdbcConfig)
 
 
-    try {
+    _try {
 
       database.using { connection =>
         connection.createStatement().execute(
@@ -49,7 +49,7 @@ class MemDatabaseDefinition private (
       }
 
       work(database)
-    } finally {
+    } _finally {
       db.close(0)
       log.info(s"Deleted database $name")
     }

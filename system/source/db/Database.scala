@@ -10,6 +10,7 @@ import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
 import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
 import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
+import ResourceFactory._try
 
 object Database {
 
@@ -28,9 +29,9 @@ class Database private (
 
     val connection = dataSource.getConnection
 
-    try {
+    _try {
       work(connection)
-    } finally {
+    } _finally {
       connection.close()
     }
   }

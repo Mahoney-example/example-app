@@ -3,6 +3,7 @@ package exampleapp
 package system.db
 
 import com.zaxxer.hikari.HikariDataSource
+import uk.org.lidalia.scalalang.ResourceFactory._try
 
 object PooledDatabaseDefinition {
 
@@ -24,9 +25,9 @@ class PooledDatabaseDefinition private (
 
     val db = Database(jdbcConfig, ds)
 
-    try {
+    _try {
       work(db)
-    } finally {
+    } _finally {
       ds.close()
     }
   }

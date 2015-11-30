@@ -8,9 +8,11 @@ import system.logging.LoggerFactory
 
 object Slf4jTestLoggerFactory {
 
-  def apply(): Slf4jTestLoggerFactory = apply(new TestLoggerFactory())
-  def apply(factory: TestLoggerFactory): Slf4jTestLoggerFactory = new Slf4jTestLoggerFactory(factory)
-
+  def apply(
+    factory: TestLoggerFactory = new TestLoggerFactory()
+  ): Slf4jTestLoggerFactory = {
+    new Slf4jTestLoggerFactory(factory)
+  }
 }
 
 class Slf4jTestLoggerFactory private (

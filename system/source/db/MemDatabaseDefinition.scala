@@ -44,7 +44,7 @@ class MemDatabaseDefinition private (
           """
             |SET DATABASE TRANSACTION CONTROL MVCC;
             |SET FILES LOB SCALE 1;
-          """.stripMargin
+          """.stripMargin.trim
         )
       }
 

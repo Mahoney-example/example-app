@@ -1,43 +1,15 @@
-import ch.qos.logback.classic.Level.INFO
-import ch.qos.logback.classic.LoggerContext
-import org.scalatest.{Outcome, Suites, fixture}
-import org.slf4j.LoggerFactory.getILoggerFactory
-import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
+package uk.org.lidalia.exampleapp.tests.functional
+
+import ch.qos.logback.classic.{Level, LoggerContext}
+import uk.org.lidalia.exampleapp.system.logging.{StaticLoggerFactory, JulConfigurer, LogbackLoggingDefinition}
+import uk.org.lidalia.exampleapp.tests.support.{TestEnvironmentDefinition, TestEnvironment, EnvironmentTests}
 import uk.org.lidalia.scalalang.ResourceFactory
 
-class RegisterTests(envDefinition: ResourceFactory[Environment] = EnvironmentDefinition()) extends fixture.FunSuite {
+class RegisterTests(envDefinition: ResourceFactory[TestEnvironment]) extends EnvironmentTests(envDefinition) {
 
-  override type FixtureParam = Environment
+  def this() = this(TestEnvironmentDefinition())
 
   test("hello world") { environment =>
-    println("hello world"+environment.servers)
-  }
-
-  override protected def withFixture(test: OneArgTest): Outcome = {
-    envDefinition.using { environment =>
-      test.apply(environment)
-    }
-  }
-}
-
-object RegisterTests {
-
-  def main(args: Array[String]) {
-
-    val staticLoggerFactory = getILoggerFactory.asInstanceOf[LoggerContext]
-
-    LogbackLoggingDefinition(
-      staticLoggerFactory,
-      "uk.org.lidalia" -> INFO
-    ).using {loggerFactory =>
-      val envDef = EnvironmentDefinition(loggerFactory = loggerFactory)
-      new Suites(
-        new RegisterTests(envDef),
-        new RegisterTests(envDef),
-        new RegisterTests(envDef),
-        new RegisterTests(envDef)
-      ).execute
-    }
+    println("hello world "+environment.environment.servers)
   }
 }

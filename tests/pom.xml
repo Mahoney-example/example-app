@@ -31,34 +31,16 @@
       <groupId>uk.org.lidalia.exampleapp</groupId>
       <artifactId>local</artifactId>
       <version>1.0.0-SNAPSHOT</version>
-      <!--<exclusions>-->
-        <!--<exclusion>-->
-          <!--<groupId>ch.qos.logback</groupId>-->
-          <!--<artifactId>logback-classic</artifactId>-->
-        <!--</exclusion>-->
-      <!--</exclusions>-->
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
       <artifactId>server</artifactId>
       <version>1.0.0-SNAPSHOT</version>
-      <!--<exclusions>-->
-        <!--<exclusion>-->
-          <!--<groupId>ch.qos.logback</groupId>-->
-          <!--<artifactId>logback-classic</artifactId>-->
-        <!--</exclusion>-->
-      <!--</exclusions>-->
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia.exampleapp</groupId>
       <artifactId>system</artifactId>
       <version>1.0.0-SNAPSHOT</version>
-      <!--<exclusions>-->
-        <!--<exclusion>-->
-          <!--<groupId>ch.qos.logback</groupId>-->
-          <!--<artifactId>logback-classic</artifactId>-->
-        <!--</exclusion>-->
-      <!--</exclusions>-->
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -103,14 +85,43 @@
       <version>1.0.0</version>
     </dependency>
     <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-api</artifactId>
+      <version>2.48.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>2.48.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-chrome-driver</artifactId>
+      <version>2.48.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-remote-driver</artifactId>
+      <version>2.48.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>uk.org.lidalia</groupId>
-      <artifactId>slf4j-test</artifactId>
-      <version>1.2.0</version>
+      <artifactId>sysout-over-slf4j</artifactId>
+      <version>1.0.2</version>
     </dependency>
   </dependencies>
 
   <build>
     <sourceDirectory>source</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+      </resource>
+    </resources>
     <testSourceDirectory>tests</testSourceDirectory>
     <plugins>
       <plugin>

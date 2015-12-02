@@ -17,26 +17,28 @@ class MemUserProfileService private () extends UserProfileService {
   private val profiles: mutable.Map[UserId, User] = mutable.Map()
 
   override def get(userId: UserId): ?[User] = {
-    lock.readLock.using(() => profiles.get(userId))
+    lock.readLock.using {
+      profiles.get(userId)
+    }
   }
 
   override def update(user: User): Unit = {
-    lock.writeLock.using(() =>
+    lock.writeLock.using {
       if (profiles.contains(user.id)) {
         profiles(user.id) = user
       } else {
         throw new IllegalStateException(s"Cannot update $user; User ID ${user.id} does not yet exist")
       }
-    )
+    }
   }
 
   override def create(user: User): Unit = {
-    lock.writeLock.using(() =>
+    lock.writeLock.using {
       if (!profiles.contains(user.id)) {
         profiles(user.id) = user
       } else {
         throw new IllegalStateException(s"Cannot create $user; User ID ${user.id} already exists")
       }
-    )
+    }
   }
 }

@@ -19,11 +19,15 @@ class MemEmailService private () extends EmailService {
   private val emails: mutable.Buffer[Email] = mutable.Buffer()
 
   override def send(email: Email): Future[EmailResult] = {
-    lock.writeLock.using(() => emails.append(email))
+    lock.writeLock.using {
+      emails.append(email)
+    }
     Future.successful(Success)
   }
 
   def emailsSent(): immutable.Seq[Email] = {
-    lock.readLock.using(() => emails.toList)
+    lock.readLock.using {
+      emails.toList
+    }
   }
 }

@@ -1,38 +1,38 @@
-import ch.qos.logback.classic.{Level, LoggerContext}
-import org.scalatest.{Status, Args, Suites}
-import org.slf4j.Logger
+package uk.org.lidalia.exampleapp.tests
+
+import ch.qos.logback.classic.Level
+import org.scalatest._
 import uk.org.lidalia.exampleapp.system.logging.JulConfigurer.sendJulToSlf4j
-import uk.org.lidalia.exampleapp.system.logging.StaticLoggerFactory.factory
-import uk.org.lidalia.exampleapp.system.logging.{StaticLoggerFactory, LogbackLoggingDefinition, JulConfigurer}
+import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 import uk.org.lidalia.exampleapp.tests.functional.RegisterTests
-import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J
+import uk.org.lidalia.exampleapp.tests.support.TestEnvironmentDefinition
+import uk.org.lidalia.scalalang.PoolFactory
 
+class FunctionalTests extends Suite {
 
-class FunctionalTests extends Suites(
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests(),
-  new RegisterTests()
-) {
+  private var actualNestedSuites: collection.immutable.IndexedSeq[Suite] = null
+
   override def run(testName: Option[String], args: Args): Status = {
 
     sendJulToSlf4j()
 
-    LogbackLoggingDefinition(
-      factory.asInstanceOf[LoggerContext],
-      Logger.ROOT_LOGGER_NAME -> Level.TRACE
-    ).using { () =>
+    val loggingDefinition = LogbackLoggingDefinition(
+      "uk.org.lidalia" -> Level.INFO
+    )
+    val envFactory = PoolFactory(TestEnvironmentDefinition())
 
-      super.run(testName, args)
+    loggingDefinition.using { () =>
+
+      envFactory.using { pool =>
+
+        val suites = new Suites(
+          new RegisterTests(pool),
+          new RegisterTests(pool)
+        )
+
+        suites.run(testName, args)
+
+      }
     }
   }
 }

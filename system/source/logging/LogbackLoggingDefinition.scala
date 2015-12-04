@@ -10,6 +10,7 @@ import ch.qos.logback.core.{UnsynchronizedAppenderBase, AsyncAppenderBase, Conso
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
 import org.slf4j.Logger
 import scalalang.ResourceFactory
+import uk.org.lidalia.exampleapp.system.logging.StaticLoggerFactory.factory
 import uk.org.lidalia.scalalang.ResourceFactory._try
 
 object LogbackLoggingDefinition {
@@ -17,19 +18,50 @@ object LogbackLoggingDefinition {
   def apply(
     loggerLevels: (String, Level)*
   ): LogbackLoggingDefinition = {
-    apply(new LoggerContext, loggerLevels:_*)
+    apply(
+      factory.asInstanceOf[LoggerContext],
+      loggerLevels:_*
+    )
+  }
+
+  def apply(
+    pattern: String,
+    loggerLevels: (String, Level)*
+  ): LogbackLoggingDefinition = {
+    apply(
+      factory.asInstanceOf[LoggerContext],
+      pattern,
+      loggerLevels:_*
+    )
   }
 
   def apply(
     logFactory: LoggerContext,
     loggerLevels: (String, Level)*
   ): LogbackLoggingDefinition = {
-    new LogbackLoggingDefinition(logFactory, loggerLevels.toList)
+    new LogbackLoggingDefinition(
+      logFactory,
+      "%d{ISO8601, UTC} [%-38thread] %-5level %-36logger{36} %msg%n",
+      loggerLevels.toList
+    )
+  }
+
+  def apply(
+    logFactory: LoggerContext,
+    pattern: String,
+    loggerLevels: (String, Level)*
+  ): LogbackLoggingDefinition = {
+    new LogbackLoggingDefinition(
+      logFactory,
+      pattern,
+      loggerLevels.toList
+    )
   }
 }
 
 class LogbackLoggingDefinition private (
   logFactory: LoggerContext,
+  pattern: String,
   loggerLevels: List[(String, Level)]
 ) extends ResourceFactory[LogbackLoggerFactory] {
 
@@ -86,7 +118,7 @@ class LogbackLoggingDefinition private (
     ca.setTarget(target)
     val pl: PatternLayoutEncoder = new PatternLayoutEncoder
     pl.setContext(logFactory)
-    pl.setPattern("%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n")
+    pl.setPattern(pattern)
     pl.start()
     ca.setEncoder(pl)
     ca.start()

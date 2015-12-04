@@ -39,10 +39,10 @@ object LogbackLoggingDefinition {
     logFactory: LoggerContext,
     loggerLevels: (String, Level)*
   ): LogbackLoggingDefinition = {
-    new LogbackLoggingDefinition(
+    apply(
       logFactory,
       "%d{ISO8601, UTC} [%-38thread] %-5level %-36logger{36} %msg%n",
-      loggerLevels.toList
+      loggerLevels:_*
     )
   }
 

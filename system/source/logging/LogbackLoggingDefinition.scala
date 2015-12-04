@@ -18,43 +18,18 @@ object LogbackLoggingDefinition {
   def apply(
     loggerLevels: (String, Level)*
   ): LogbackLoggingDefinition = {
-    apply(
-      factory.asInstanceOf[LoggerContext],
-      loggerLevels:_*
-    )
+    apply(loggerLevels.toList)
   }
 
   def apply(
-    pattern: String,
-    loggerLevels: (String, Level)*
-  ): LogbackLoggingDefinition = {
-    apply(
-      factory.asInstanceOf[LoggerContext],
-      pattern,
-      loggerLevels:_*
-    )
-  }
-
-  def apply(
-    logFactory: LoggerContext,
-    loggerLevels: (String, Level)*
-  ): LogbackLoggingDefinition = {
-    apply(
-      logFactory,
-      "%d{ISO8601, UTC} [%-38thread] %-5level %-36logger{36} %msg%n",
-      loggerLevels:_*
-    )
-  }
-
-  def apply(
-    logFactory: LoggerContext,
-    pattern: String,
-    loggerLevels: (String, Level)*
+    loggerLevels: List[(String, Level)] = List(),
+    logFactory: LoggerContext = factory.asInstanceOf[LoggerContext],
+    pattern: String = "%d{ISO8601, UTC} [%-20.20thread] %-5level %-36logger{36} %msg%n"
   ): LogbackLoggingDefinition = {
     new LogbackLoggingDefinition(
       logFactory,
       pattern,
-      loggerLevels.toList
+      loggerLevels
     )
   }
 }

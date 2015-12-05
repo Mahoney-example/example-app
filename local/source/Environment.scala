@@ -11,6 +11,6 @@ case class Environment (
   servers: List[Server]
 ) extends Reusable {
 
-  override def reset() = (List(stub1, database) ++ servers).foreach(_.reset())
+  override def reset() = (stub1 :: database :: servers).foreach(_.reset())
 
 }

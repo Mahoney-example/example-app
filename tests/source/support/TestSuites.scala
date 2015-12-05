@@ -8,21 +8,21 @@ import uk.org.lidalia.exampleapp.system.logging.JulConfigurer.sendJulToSlf4j
 import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 import uk.org.lidalia.scalalang.ResourceFactory
 
-abstract class TestSuite[R](
-  envDefinition: ?[ResourceFactory[R]]
+abstract class TestSuites[R](
+  optionFactory: ?[ResourceFactory[R]]
 ) extends Suite {
 
   def this() = this(None)
 
-  def nestedTests(factory: ResourceFactory[R]): List[Suite]
-  def metaFactory: ResourceFactory[ResourceFactory[R]]
-
   override def run(testName: Option[String], args: Args): Status = {
 
-    if (envDefinition.isDefined) {
-      val suites = nestedTests(envDefinition.get)
+    if (optionFactory.isDefined) {
+
+      val suites = nestedSuites(optionFactory.get)
       new Suites(suites:_*).run(testName, args)
+
     } else {
+
       sendJulToSlf4j()
 
       val loggingDefinition = LogbackLoggingDefinition(
@@ -33,11 +33,15 @@ abstract class TestSuite[R](
 
         metaFactory.using { factory =>
 
-          val suites = nestedTests(factory)
+          val suites = nestedSuites(factory)
           new Suites(suites:_*).run(testName, args)
 
         }
       }
     }
   }
+
+  def nestedSuites(factory: ResourceFactory[R]): List[Suite]
+
+  def metaFactory: ResourceFactory[ResourceFactory[R]]
 }

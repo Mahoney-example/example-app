@@ -2,6 +2,7 @@ package uk.org.lidalia
 package exampleapp.system
 package logging
 
+import ch.qos.logback.classic.Level.WARN
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.jul.LevelChangePropagator
 import ch.qos.logback.classic.spi.ILoggingEvent
@@ -45,7 +46,7 @@ class LogbackLoggingDefinition private (
     logFactory.reset()
 
     val root = logFactory.getLogger(Logger.ROOT_LOGGER_NAME)
-    root.setLevel(Level.WARN)
+    root.setLevel(WARN)
     root.detachAndStopAllAppenders()
 
     val asyncConsoleAppender = new AsyncAppenderBase[ILoggingEvent] {
@@ -59,11 +60,12 @@ class LogbackLoggingDefinition private (
 
     val sysConsoleAppender = new UnsynchronizedAppenderBase[ILoggingEvent] {
       override def append(eventObject: ILoggingEvent): Unit = {
-        if (eventObject.getLevel.isGreaterOrEqual(Level.WARN)) {
-          sysErrConsoleAppender.doAppend(eventObject)
+        val appender = if (eventObject.getLevel.isGreaterOrEqual(WARN)) {
+          sysErrConsoleAppender
         } else {
-          sysOutConsoleAppender.doAppend(eventObject)
+          sysOutConsoleAppender
         }
+        appender.doAppend(eventObject)
       }
     }
     sysConsoleAppender.setName("console")

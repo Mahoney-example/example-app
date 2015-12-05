@@ -4,7 +4,7 @@ package exampleapp.tests
 import ch.qos.logback.classic.Level.INFO
 import scalalang.{PoolFactory, ResourceFactory}
 import support.{TestEnvironment, TestEnvironmentDefinition, TestSuites}
-import uk.org.lidalia.exampleapp.tests.functional.RegisterTests
+import functional.{LoginTests, RegisterTests}
 
 class FunctionalTests(
   envDefinition: ?[ResourceFactory[TestEnvironment]]
@@ -13,7 +13,7 @@ class FunctionalTests(
   def this() = this(None)
 
   override def nestedSuites(factory: ResourceFactory[TestEnvironment]) = List(
-    new RegisterTests(factory),
+    new LoginTests(factory),
     new RegisterTests(factory)
   )
 

@@ -12,11 +12,8 @@ abstract class EnvironmentTests(envDefinition: ResourceFactory[TestEnvironment])
   override type FixtureParam = TestEnvironment
 
   override protected def withFixture(test: OneArgTest): Outcome = {
-    EnvironmentTests.logger.info("********* STARTING TEST")
-    val result = envDefinition.using { environment =>
+    envDefinition.using { environment =>
       test.apply(environment)
     }
-    EnvironmentTests.logger.info("********* TEST DONE")
-    result
   }
 }

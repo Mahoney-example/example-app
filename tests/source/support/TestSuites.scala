@@ -12,36 +12,33 @@ abstract class TestSuites[R](
   optionFactory: ?[ResourceFactory[R]]
 ) extends Suite {
 
-  def this() = this(None)
-
   override def run(testName: Option[String], args: Args): Status = {
 
     if (optionFactory.isDefined) {
 
-      val suites = nestedSuites(optionFactory.get)
-      new Suites(suites:_*).run(testName, args)
+      runSuites(testName, args, optionFactory.get)
 
     } else {
 
       sendJulToSlf4j()
 
-      val loggingDefinition = LogbackLoggingDefinition(
-        "uk.org.lidalia" -> Level.INFO
-      )
-
-      loggingDefinition.using { () =>
+      LogbackLoggingDefinition(logLevels).using { () =>
 
         metaFactory.using { factory =>
-
-          val suites = nestedSuites(factory)
-          new Suites(suites:_*).run(testName, args)
-
+          runSuites(testName, args, factory)
         }
       }
     }
   }
 
+  private def runSuites(testName: Option[String], args: Args, factory: ResourceFactory[R]): Status = {
+    val suites = nestedSuites(factory)
+    new Suites(suites: _*).run(testName, args)
+  }
+
   def nestedSuites(factory: ResourceFactory[R]): List[Suite]
 
   def metaFactory: ResourceFactory[ResourceFactory[R]]
+
+  def logLevels: List[(String, Level)] = List()
 }

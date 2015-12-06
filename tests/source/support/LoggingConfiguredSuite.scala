@@ -8,6 +8,8 @@ import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 
 trait LoggingConfiguredSuite extends Suite {
 
+  protected val logLevels: List[(String, Level)] = List()
+
   override def run(testName: Option[String], args: Args): Status = {
 
     if (args.configMap.contains("loggerContext")) {
@@ -20,6 +22,4 @@ trait LoggingConfiguredSuite extends Suite {
       }
     }
   }
-
-  def logLevels: List[(String, Level)] = List()
 }

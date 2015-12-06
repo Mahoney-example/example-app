@@ -3,26 +3,17 @@ package exampleapp.tests.support
 
 import ch.qos.logback.classic.Level.INFO
 import org.scalatest.fixture
-import scalalang.{PoolFactory, ResourceFactory}
+import scalalang.PoolFactory
 
 abstract class EnvironmentTests
 extends fixture.FunSuite
-with FixtureProvider[TestEnvironment]
+with FixtureSuite[TestEnvironment]
 with LoggingConfiguredSuite
 {
 
-  override protected def withFixture(test: OneArgTest) = {
+  override protected val metaFactory = PoolFactory(TestEnvironmentDefinition())
 
-    val envDefinition = test.configMap.getRequired[ResourceFactory[TestEnvironment]]("fixtureFactory")
-
-    envDefinition.using { environment =>
-      test.apply(environment)
-    }
-  }
-
-  override def metaFactory = PoolFactory(TestEnvironmentDefinition())
-
-  override def logLevels = List(
+  override protected val logLevels = List(
     "uk.org.lidalia" -> INFO
   )
 }

@@ -14,9 +14,9 @@ with FixtureProvider[TestEnvironment]
 with LoggingConfiguredSuite
 {
 
-  override def metaFactory = PoolFactory(TestEnvironmentDefinition())
+  override protected val metaFactory = PoolFactory(TestEnvironmentDefinition())
 
-  override def logLevels = List(
+  override protected val logLevels = List(
     "uk.org.lidalia" -> INFO
   )
 }

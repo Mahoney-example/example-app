@@ -10,7 +10,7 @@ trait FixtureProvider[R] extends Suite {
 
   protected val metaFactory: ResourceFactory[ResourceFactory[R]]
 
-  protected lazy val configKey = metaFactory.getClass.getName
+  protected lazy val configKey = classOf[FixtureProvider[_]].getName+".factory"
 
   override def run(testName: Option[String], args: Args): Status = {
 

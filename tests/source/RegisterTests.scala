@@ -1,19 +1,16 @@
 package uk.org.lidalia
-package exampleapp.tests.functional
+package exampleapp.tests
 
 import org.slf4j.LoggerFactory
-import uk.org.lidalia.exampleapp.tests.support.{EnvironmentTests, TestEnvironment, TestEnvironmentDefinition}
-import uk.org.lidalia.scalalang.ResourceFactory
+import uk.org.lidalia.exampleapp.tests.support.EnvironmentTests
 
-class RegisterTests(
-  envDefinition: ResourceFactory[TestEnvironment]
-) extends EnvironmentTests(
-  envDefinition
-) {
-
-  def this() = this(TestEnvironmentDefinition())
+class RegisterTests extends EnvironmentTests {
 
   test("register") { environment =>
+    LoggerFactory.getLogger(classOf[RegisterTests]).info("Test in progress")
+  }
+
+  test("register2") { environment =>
     LoggerFactory.getLogger(classOf[RegisterTests]).info("Test in progress")
   }
 }

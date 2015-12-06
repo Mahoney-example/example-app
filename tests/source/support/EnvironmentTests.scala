@@ -1,19 +1,21 @@
-package uk.org.lidalia.exampleapp.tests.support
+package uk.org.lidalia
+package exampleapp.tests.support
 
-import org.scalatest.{Outcome, fixture}
-import org.slf4j.LoggerFactory
-import uk.org.lidalia.scalalang.ResourceFactory
+import org.scalatest.fixture
+import scalalang.{PoolFactory, ResourceFactory}
 
-object EnvironmentTests {
-  val logger = LoggerFactory.getLogger(classOf[EnvironmentTests])
-}
-abstract class EnvironmentTests(envDefinition: ResourceFactory[TestEnvironment]) extends fixture.FunSuite {
+abstract class EnvironmentTests
+extends fixture.FunSuite
+with FixtureProvider[TestEnvironment] {
 
-  override type FixtureParam = TestEnvironment
+  override protected def withFixture(test: OneArgTest) = {
 
-  override protected def withFixture(test: OneArgTest): Outcome = {
+    val envDefinition = test.configMap.getRequired[ResourceFactory[TestEnvironment]]("fixtureFactory")
+
     envDefinition.using { environment =>
       test.apply(environment)
     }
   }
+
+  override def metaFactory = PoolFactory(TestEnvironmentDefinition())
 }

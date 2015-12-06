@@ -14,7 +14,8 @@ import liquibase.executor.jvm.JdbcExecutor
 import liquibase.ext.logging.slf4j.Slf4jLogger
 import liquibase.lockservice.{LockService, StandardLockService}
 import liquibase.logging.Logger
-import liquibase.servicelocator.ServiceLocator
+import liquibase.sdk.resource.MockResourceAccessor
+import liquibase.servicelocator.{DefaultPackageScanClassResolver, ServiceLocator}
 import liquibase.snapshot.SnapshotGenerator
 import liquibase.snapshot.jvm.{CatalogSnapshotGenerator, ColumnSnapshotGenerator, DataSnapshotGenerator, ForeignKeySnapshotGenerator, IndexSnapshotGenerator, PrimaryKeySnapshotGenerator, SchemaSnapshotGenerator, SequenceSnapshotGenerator, TableSnapshotGenerator, UniqueConstraintSnapshotGenerator, ViewSnapshotGenerator}
 import liquibase.sqlgenerator.SqlGenerator
@@ -28,7 +29,7 @@ object FastLiquibase {
   def apply() = ServiceLocator.setInstance(new FastServiceLocator)
 
 }
-class FastServiceLocator extends ServiceLocator {
+class FastServiceLocator extends ServiceLocator(new DefaultPackageScanClassResolver, new MockResourceAccessor) {
 
   private val typeToClass: Map[Class[_], Array[Class[_]]] = Map(
     classOf[DatabaseObject] -> Array(

@@ -12,8 +12,6 @@ import uk.org.lidalia.stubhttp.StubHttpServerFactory
 
 object Main {
 
-  FastLiquibase()
-
   def main(args: Array[String]) {
 
     val logbackLoggingDefinition = LogbackLoggingDefinition(
@@ -23,6 +21,9 @@ object Main {
     )
 
     logbackLoggingDefinition.using { loggerFactory =>
+
+      FastLiquibase()
+
       val environment = EnvironmentDefinition(
         List(Port(8080)),
         loggerFactory,

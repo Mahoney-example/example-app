@@ -10,7 +10,7 @@ object ThreadTest {
   }
 
   def subCall(): Unit = {
-    val thread = new ChildThread {
+    val thread = new ChildThread("hi") {
       override def run() = {
         throw new Exception
       }

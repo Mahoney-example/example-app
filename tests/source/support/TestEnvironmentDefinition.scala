@@ -7,8 +7,8 @@ import uk.org.lidalia.scalalang.ResourceFactory.usingAll
 object TestEnvironmentDefinition {
 
   def apply(
-    webDriverDefinition: WebDriverDefinition = WebDriverDefinition(),
-    environmentDefinition: EnvironmentDefinition = EnvironmentDefinition()) = {
+    webDriverDefinition: ResourceFactory[ReusableWebDriver] = WebDriverDefinition(),
+    environmentDefinition: ResourceFactory[Environment] = EnvironmentDefinition()) = {
     new TestEnvironmentDefinition(
       webDriverDefinition,
       environmentDefinition

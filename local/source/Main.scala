@@ -5,6 +5,8 @@ package local
 import ch.qos.logback.classic.Level
 import db.changelog.FastLiquibase
 import org.slf4j.Logger.ROOT_LOGGER_NAME
+import server.services.profiles.userProfileTableCreation
+import system.db.changelog.Migrator.changeLog
 import uk.org.lidalia.exampleapp.system.db.MemDatabaseDefinition
 import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 import uk.org.lidalia.net.Port
@@ -28,7 +30,7 @@ object Main {
         List(Port(8080)),
         loggerFactory,
         StubHttpServerFactory(Port(8082)),
-        MemDatabaseDefinition("local")
+        MemDatabaseDefinition(changeLog(userProfileTableCreation), "local")
       )
 
       environment.runUntilShutdown()

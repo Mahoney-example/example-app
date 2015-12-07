@@ -6,7 +6,9 @@ import uk.org.lidalia.exampleapp.tests.support.EnvironmentTests
 
 class LoginTests extends EnvironmentTests {
 
-  test("login") { environment =>
-    LoggerFactory.getLogger(classOf[LoginTests]).info("Test in progress")
+  Range(1, 15).foreach { index =>
+    test(s"login $index") { environment =>
+      LoggerFactory.getLogger(classOf[LoginTests]).info(s"Test $index in progress")
+    }
   }
 }

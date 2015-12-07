@@ -15,15 +15,29 @@ import ResourceFactory._try
 
 object Database {
 
-  def apply(config: JdbcConfig): Database = apply(config, DriverManagerDataSource(config))
+  def apply(
+    config: JdbcConfig,
+    changelog: DatabaseChangeLog
+  ): Database = {
+    apply(
+      config,
+      DriverManagerDataSource(config),
+      changelog
+    )
+  }
 
-  def apply(config: JdbcConfig, dataSource: DataSource): Database = new Database(config, dataSource)
+  def apply(
+    config: JdbcConfig,
+    dataSource: DataSource,
+    changelog: DatabaseChangeLog
+  ): Database = new Database(config, dataSource, changelog)
 
 }
 
 class Database private (
   val jdbcConfig: JdbcConfig,
-  val dataSource: DataSource
+  val dataSource: DataSource,
+  changelog: DatabaseChangeLog
 ) extends Reusable with ResourceFactory[Connection] with HasLogger {
 
   override def using[T](work: (Connection) => T): T = {
@@ -37,12 +51,21 @@ class Database private (
     }
   }
 
-  def update(changelog: DatabaseChangeLog): Unit = {
+  def update(): Unit = {
     using { connection =>
       log.info("DB Update start")
       val liquibaseDb = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
       Migrator(changelog, liquibaseDb).update()
       log.info("DB Update end")
     }
+  }
+
+  override def reset(): Unit = {
+    using { connection =>
+      connection.createStatement().execute(
+        "DROP SCHEMA PUBLIC CASCADE"
+      )
+    }
+    update()
   }
 }

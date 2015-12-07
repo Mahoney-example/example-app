@@ -23,13 +23,13 @@ object EnvironmentDefinition {
     ports: List[?[Port]] = List(None),
     loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
-    databaseDefinition: DatabaseDefinition = MemDatabaseDefinition()
+    databaseDefinition: DatabaseDefinition = MemDatabaseDefinition(changeLog(userProfileTableCreation))
   ) = {
 
     val initialisingDbDefinition = new DatabaseDefinition {
       override def using[T](work: (Database) => T): T = {
         databaseDefinition.using { database =>
-          database.update(changeLog(userProfileTableCreation))
+          database.update()
           work(database)
         }
       }

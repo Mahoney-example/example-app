@@ -2,6 +2,7 @@ package uk.org.lidalia
 package exampleapp
 package system.db
 
+import liquibase.changelog.DatabaseChangeLog
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
@@ -12,13 +13,15 @@ import uk.org.lidalia.scalalang.ResourceFactory._try
 object MemDatabaseDefinition {
 
   def apply(
+    changelog: DatabaseChangeLog,
     name: String = randomAlphanumeric(5)
   ) = {
-    new MemDatabaseDefinition(name)
+    new MemDatabaseDefinition(changelog, name)
   }
 }
 
 class MemDatabaseDefinition private (
+  changelog: DatabaseChangeLog,
   name: String
 ) extends DatabaseDefinition with HasLogger {
 
@@ -34,7 +37,7 @@ class MemDatabaseDefinition private (
     val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, name, new HsqlProperties)
     log.info(s"Created database $name")
 
-    val database = Database(jdbcConfig)
+    val database = Database(jdbcConfig, changelog)
 
 
     _try {

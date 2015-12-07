@@ -25,7 +25,7 @@ object LogbackLoggingDefinition {
   def apply(
     loggerLevels: List[(String, Level)] = List(),
     logFactory: LoggerContext = factory.asInstanceOf[LoggerContext],
-    pattern: String = "%d{ISO8601, UTC} [%-20.20thread] %-5level %-36logger{36} %msg%n"
+    pattern: String = "%d{ISO8601, UTC} [%-40.40thread] %-5level %-36logger{36} %msg%n"
   ): LogbackLoggingDefinition = {
     new LogbackLoggingDefinition(
       logFactory,

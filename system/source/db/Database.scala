@@ -8,6 +8,7 @@ import javax.sql.DataSource
 import liquibase.changelog.DatabaseChangeLog
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
+import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
 import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
 import ResourceFactory._try
@@ -23,7 +24,7 @@ object Database {
 class Database private (
   val jdbcConfig: JdbcConfig,
   val dataSource: DataSource
-) extends Reusable with ResourceFactory[Connection] {
+) extends Reusable with ResourceFactory[Connection] with HasLogger {
 
   override def using[T](work: (Connection) => T): T = {
 
@@ -38,8 +39,10 @@ class Database private (
 
   def update(changelog: DatabaseChangeLog): Unit = {
     using { connection =>
+      log.info("DB Update start")
       val liquibaseDb = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
       Migrator(changelog, liquibaseDb).update()
+      log.info("DB Update end")
     }
   }
 }

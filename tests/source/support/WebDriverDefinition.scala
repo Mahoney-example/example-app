@@ -26,8 +26,9 @@ class WebDriverDefinition private() extends ResourceFactory[ReusableWebDriver] w
     _try {
       log.info("Starting web driver")
       chromeDriverService.start()
+      val driver = ReusableWebDriver(new ChromeDriver(chromeDriverService))
       log.info("Started web driver")
-      work(ReusableWebDriver(new ChromeDriver(chromeDriverService)))
+      work(driver)
     } _finally {
       log.info("Stopping web driver")
       chromeDriverService.stop()

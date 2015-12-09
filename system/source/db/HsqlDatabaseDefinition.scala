@@ -6,24 +6,25 @@ import liquibase.changelog.DatabaseChangeLog
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
+import scalalang.ResourceFactory
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.net.Uri
 import uk.org.lidalia.scalalang.ResourceFactory._try
 
-object MemDatabaseDefinition {
+object HsqlDatabaseDefinition {
 
   def apply(
     changelog: DatabaseChangeLog,
     name: String = randomAlphanumeric(5)
   ) = {
-    new MemDatabaseDefinition(changelog, name)
+    new HsqlDatabaseDefinition(changelog, name)
   }
 }
 
-class MemDatabaseDefinition private (
+class HsqlDatabaseDefinition private (
   changelog: DatabaseChangeLog,
   name: String
-) extends DatabaseDefinition with HasLogger {
+) extends ResourceFactory[HsqlDatabase] with HasLogger {
 
   private val jdbcConfig = JdbcConfig(
     Uri(s"jdbc:hsqldb:mem:$name"),
@@ -32,12 +33,12 @@ class MemDatabaseDefinition private (
     "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
   )
 
-  override def using[T](work: (Database) => T): T = {
+  override def using[T](work: (HsqlDatabase) => T): T = {
 
     val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, name, new HsqlProperties)
     log.info(s"Created database $name")
 
-    val database = Database(jdbcConfig, changelog)
+    val database = HsqlDatabase(jdbcConfig, changelog)
 
 
     _try {

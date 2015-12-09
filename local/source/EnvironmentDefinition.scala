@@ -7,7 +7,7 @@ import server.application.ApplicationConfig
 import server.services.profiles.userProfileTableCreation
 import server.web.{ServerDefinition, ServerConfig}
 import system.db.changelog.Migrator.changeLog
-import system.db.{Database, MemDatabaseDefinition, DatabaseDefinition}
+import system.db.{HsqlDatabase, HsqlDatabaseDefinition}
 import system.blockUntilShutdown
 import net.Port
 
@@ -23,11 +23,11 @@ object EnvironmentDefinition {
     ports: List[?[Port]] = List(None),
     loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
-    databaseDefinition: DatabaseDefinition = MemDatabaseDefinition(changeLog(userProfileTableCreation))
+    databaseDefinition: ResourceFactory[HsqlDatabase] = HsqlDatabaseDefinition(changeLog(userProfileTableCreation))
   ) = {
 
-    val initialisingDbDefinition = new DatabaseDefinition {
-      override def using[T](work: (Database) => T): T = {
+    val initialisingDbDefinition = new ResourceFactory[HsqlDatabase] {
+      override def using[T](work: (HsqlDatabase) => T): T = {
         databaseDefinition.using { database =>
           database.update()
           work(database)
@@ -48,7 +48,7 @@ class EnvironmentDefinition private (
   ports: List[?[Port]],
   loggerFactory: LoggerFactory[Logger],
   stub1Definition: StubHttpServerFactory,
-  databaseDefinition: DatabaseDefinition
+  databaseDefinition: ResourceFactory[HsqlDatabase]
 ) extends ResourceFactory[Environment] {
 
   def runUntilShutdown(): Unit = {

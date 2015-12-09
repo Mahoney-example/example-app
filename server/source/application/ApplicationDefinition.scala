@@ -2,16 +2,14 @@ package uk.org.lidalia
 package exampleapp
 package server.application
 
-import liquibase.changelog.DatabaseChangeLog
 import org.slf4j.Logger
 import scalalang.ResourceFactory
 import scalalang.ResourceFactory._try
 import server.services.Services
 import server.services.email.HttpEmailService
-import server.services.profiles.{userProfileTableCreation, DbUserProfileService}
+import server.services.profiles.DbUserProfileService
 import system.HasLogger
 import system.db.PooledDatabaseDefinition
-import system.db.changelog.Migrator.changeLog
 import system.logging.{StaticLoggerFactory, LoggerFactory}
 
 object ApplicationDefinition {
@@ -44,7 +42,7 @@ class ApplicationDefinition private (
 
     services match {
       case None =>
-        PooledDatabaseDefinition(config.jdbcConfig, changeLog(userProfileTableCreation)).using { database =>
+        PooledDatabaseDefinition(config.jdbcConfig).using { database =>
           run(Services(
             HttpEmailService(config.sendGridUrl, config.sendGridToken),
             DbUserProfileService(database)

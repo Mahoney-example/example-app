@@ -6,11 +6,7 @@ import java.sql.Connection
 import javax.sql.DataSource
 
 import liquibase.changelog.DatabaseChangeLog
-import liquibase.database.DatabaseFactory
-import liquibase.database.jvm.JdbcConnection
-import uk.org.lidalia.exampleapp.system.HasLogger
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
-import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
+import uk.org.lidalia.scalalang.ResourceFactory
 import ResourceFactory._try
 
 object Database {
@@ -20,25 +16,19 @@ object Database {
     changelog: DatabaseChangeLog
   ): Database = {
     apply(
-      config,
-      DriverManagerDataSource(config),
-      changelog
+      DriverManagerDataSource(config)
     )
   }
 
   def apply(
-    config: JdbcConfig,
-    dataSource: DataSource,
-    changelog: DatabaseChangeLog
-  ): Database = new Database(config, dataSource, changelog)
+    dataSource: DataSource
+  ): Database = new Database(dataSource)
 
 }
 
-class Database private (
-  val jdbcConfig: JdbcConfig,
-  val dataSource: DataSource,
-  changelog: DatabaseChangeLog
-) extends Reusable with ResourceFactory[Connection] with HasLogger {
+class Database protected (
+  dataSource: DataSource
+) extends ResourceFactory[Connection] {
 
   override def using[T](work: (Connection) => T): T = {
 
@@ -49,23 +39,5 @@ class Database private (
     } _finally {
       connection.close()
     }
-  }
-
-  def update(): Unit = {
-    using { connection =>
-      log.info("DB Update start")
-      val liquibaseDb = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
-      Migrator(changelog, liquibaseDb).update()
-      log.info("DB Update end")
-    }
-  }
-
-  override def reset(): Unit = {
-    using { connection =>
-      connection.createStatement().execute(
-        "DROP SCHEMA PUBLIC CASCADE"
-      )
-    }
-    update()
   }
 }

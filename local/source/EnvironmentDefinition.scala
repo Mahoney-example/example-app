@@ -7,7 +7,7 @@ import server.application.ApplicationConfig
 import server.services.profiles.userProfileTableCreation
 import server.web.{ServerDefinition, ServerConfig}
 import system.db.changelog.Migrator.changeLog
-import system.db.{HsqlDatabase, HsqlDatabaseDefinition}
+import system.db.hsqldb.{HsqlDatabase, HsqlDatabaseDefinition}
 import system.blockUntilShutdown
 import net.Port
 

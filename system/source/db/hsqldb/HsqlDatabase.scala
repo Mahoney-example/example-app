@@ -1,11 +1,11 @@
-package uk.org.lidalia
-package exampleapp
-package system.db
+package uk.org.lidalia.exampleapp.system.db.hsqldb
 
 import javax.sql.DataSource
 
 import liquibase.changelog.DatabaseChangeLog
 import uk.org.lidalia.exampleapp.system.HasLogger
+import uk.org.lidalia.exampleapp.system.db.changelog.UpdatableDatabase
+import uk.org.lidalia.exampleapp.system.db.{DriverManagerDataSource, JdbcConfig}
 import uk.org.lidalia.scalalang.Reusable
 
 object HsqlDatabase {

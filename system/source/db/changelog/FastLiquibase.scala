@@ -1,3 +1,5 @@
+package uk.org.lidalia
+package exampleapp.system
 package db.changelog
 
 import liquibase.changelog.{ChangeLogHistoryService, StandardChangeLogHistoryService}

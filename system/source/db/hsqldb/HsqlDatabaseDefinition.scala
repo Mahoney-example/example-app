@@ -1,14 +1,13 @@
-package uk.org.lidalia
-package exampleapp
-package system.db
+package uk.org.lidalia.exampleapp.system.db.hsqldb
 
 import liquibase.changelog.DatabaseChangeLog
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
 import org.hsqldb.persist.HsqlProperties
 import org.hsqldb.{DatabaseManager, DatabaseURL}
-import scalalang.ResourceFactory
 import uk.org.lidalia.exampleapp.system.HasLogger
+import uk.org.lidalia.exampleapp.system.db.JdbcConfig
 import uk.org.lidalia.net.Uri
+import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.ResourceFactory._try
 
 object HsqlDatabaseDefinition {

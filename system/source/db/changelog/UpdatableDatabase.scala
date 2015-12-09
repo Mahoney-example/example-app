@@ -1,14 +1,13 @@
 package uk.org.lidalia
-package exampleapp
-package system.db
+package exampleapp.system
+package db.changelog
 
 import javax.sql.DataSource
 
 import liquibase.changelog.DatabaseChangeLog
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
-import uk.org.lidalia.exampleapp.system.HasLogger
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator
+import uk.org.lidalia.exampleapp.system.db.Database
 import uk.org.lidalia.scalalang.Reusable
 
 class UpdatableDatabase protected (

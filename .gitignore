@@ -7,3 +7,4 @@ target/
 *.iws
 *.ids
 .idea
+.DS_Store

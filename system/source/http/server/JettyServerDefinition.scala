@@ -31,9 +31,9 @@ class JettyServerDefinition(
         val request = Request(
           Method(baseRequest.getMethod),
           RequestUri(baseRequest.getPathInfo),
-          httpServletRequest.getH
+          List()
         )
-        val response = http.execute()
+        val response = http.execute(request)
       }
 
     })
@@ -48,6 +48,6 @@ class JettyServerDefinition(
   }
 }
 
-class JettyServer private (server: Server) {
+class JettyServer private[server] (server: jetty.Server) {
 
 }

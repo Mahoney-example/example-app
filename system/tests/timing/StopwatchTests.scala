@@ -5,8 +5,8 @@ import java.time.Duration.ofSeconds
 import java.time.Instant
 
 import org.scalatest.FunSuite
+import uk.org.lidalia.exampleapp.system.timing.Stopwatch.{timeWithChildResults, time}
 
-import collection.mutable.ListBuffer
 import util.Success
 
 class StopwatchTests extends FunSuite {
@@ -15,9 +15,8 @@ class StopwatchTests extends FunSuite {
 
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
-    val stopwatch = new Stopwatch(clock)
 
-    val result = stopwatch.time("some work") {
+    val result = time("some work", clock) {
       clock.fastForward(ofSeconds(1))
       "result"
     }
@@ -34,16 +33,15 @@ class StopwatchTests extends FunSuite {
 
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
-    val stopwatch = new Stopwatch(clock)
 
-    val result = stopwatch.timeWithChildResults("top work") {
+    val result = timeWithChildResults("top work", clock) {
       clock.fastForward(ofSeconds(1))
-      val child1 = stopwatch.time("child work 1") {
+      val child1 = time("child work 1", clock) {
         clock.fastForward(ofSeconds(1))
         "child result 1"
       }
       clock.fastForward(ofSeconds(1))
-      val child2 = stopwatch.time("child work 2") {
+      val child2 = time("child work 2", clock) {
         clock.fastForward(ofSeconds(1))
         "child result 2"
       }

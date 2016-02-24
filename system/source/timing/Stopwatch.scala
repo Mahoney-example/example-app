@@ -5,9 +5,9 @@ import java.time.Clock
 
 import util.Success
 
-class Stopwatch(clock: Clock = Clock.systemDefaultZone()) {
+object Stopwatch {
 
-  def time[I, O](input: I)(work: => O): StopwatchResult[I, O] = {
+  def time[I, O](input: I, clock: Clock = Clock.systemDefaultZone())(work: => O): StopwatchResult[I, O] = {
 
     val start = clock.instant()
     val result = work
@@ -23,7 +23,7 @@ class Stopwatch(clock: Clock = Clock.systemDefaultZone()) {
     stopwatchResult
   }
 
-  def timeWithChildResults[I, O](input: I)(work: => (O, List[StopwatchResult[_, _]])): StopwatchResult[I, O] = {
+  def timeWithChildResults[I, O](input: I, clock: Clock = Clock.systemDefaultZone())(work: => (O, List[StopwatchResult[_, _]])): StopwatchResult[I, O] = {
 
     val start = clock.instant()
     val result = work

@@ -17,7 +17,7 @@ object TimedResourceFactory {
     timingNotifier: TimingNotifier = noOpTimingNotifier,
     clock: Clock = Clock.systemDefaultZone(),
     name: ?[String] = None
-  ) = {
+  ): ResourceFactory[R] = {
     new TimedResourceFactory[R](
       decorated,
       timingNotifier,
@@ -27,7 +27,7 @@ object TimedResourceFactory {
   }
 }
 
-class TimedResourceFactory[+R] private (
+private class TimedResourceFactory[+R] private (
   decorated: ResourceFactory[R],
   timingNotifier: TimingNotifier = noOpTimingNotifier,
   clock: Clock = Clock.systemDefaultZone(),

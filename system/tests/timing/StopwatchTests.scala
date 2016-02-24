@@ -7,6 +7,7 @@ import java.time.Instant
 import org.scalatest.FunSuite
 
 import collection.mutable.ListBuffer
+import util.Success
 
 class StopwatchTests extends FunSuite {
 
@@ -25,8 +26,7 @@ class StopwatchTests extends FunSuite {
       start = start,
       end = start.plusSeconds(1),
       input = "some work",
-      output = "result",
-      Nil
+      output = Success("result")
     ))
   }
 
@@ -55,21 +55,19 @@ class StopwatchTests extends FunSuite {
       start = start,
       end = start.plusSeconds(5),
       input = "top work",
-      output = "top result",
+      output = Success("top result"),
       List(
         StopwatchResult(
           start = start.plusSeconds(1),
           end = start.plusSeconds(2),
           input = "child work 1",
-          output = "child result 1",
-          Nil
+          output = Success("child result 1")
         ),
         StopwatchResult(
           start = start.plusSeconds(3),
           end = start.plusSeconds(4),
           input = "child work 2",
-          output = "child result 2",
-          Nil
+          output = Success("child result 2")
         )
       )
     ))

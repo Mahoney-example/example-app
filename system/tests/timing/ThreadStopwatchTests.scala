@@ -4,9 +4,9 @@ import java.time.Duration.ofSeconds
 import java.time.Instant
 
 import org.scalatest.FunSuite
+import uk.org.lidalia.exampleapp.system.timing.ThreadStopwatch.timeWithResults
 
-import scala.Exception
-import util.{Success, Failure, Try}
+import util.{Success, Failure}
 
 class ThreadStopwatchTests extends FunSuite {
 
@@ -15,7 +15,7 @@ class ThreadStopwatchTests extends FunSuite {
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
 
-    val result = ThreadStopwatch(clock).time("some work") {
+    val result = timeWithResults("some work", clock) {
       clock.fastForward(ofSeconds(1))
       "result"
     }
@@ -33,7 +33,7 @@ class ThreadStopwatchTests extends FunSuite {
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
 
-    val result = ThreadStopwatch(clock).time("some work") {
+    val result = timeWithResults("some work", clock) {
       clock.fastForward(ofSeconds(1))
       "result"
     }
@@ -50,9 +50,8 @@ class ThreadStopwatchTests extends FunSuite {
 
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
-    val stopwatch = ThreadStopwatch(clock)
 
-    val result = stopwatch.time("top work") {
+    val result = timeWithResults("top work", clock) {
       clock.fastForward(ofSeconds(1))
       ThreadStopwatch.time("child work 1") {
         clock.fastForward(ofSeconds(1))
@@ -96,10 +95,9 @@ class ThreadStopwatchTests extends FunSuite {
 
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
-    val stopwatch = ThreadStopwatch(clock)
     val thrown = new Exception("Oh no")
 
-    val result = stopwatch.time("top work") {
+    val result = timeWithResults("top work", clock) {
       clock.fastForward(ofSeconds(1))
       ThreadStopwatch.time("child work 1") {
         clock.fastForward(ofSeconds(1))
@@ -140,11 +138,10 @@ class ThreadStopwatchTests extends FunSuite {
 
     val start = Instant.now()
     val clock = new MutableFixedClock(start)
-    val stopwatch = ThreadStopwatch(clock)
 
-    val result = stopwatch.time("top work") {
+    val result = timeWithResults("top work", clock) {
       clock.fastForward(ofSeconds(1))
-      stopwatch.time("child work 1") {
+      timeWithResults("child work 1") {
         clock.fastForward(ofSeconds(1))
         "child result 1"
       }

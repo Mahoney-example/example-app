@@ -12,20 +12,15 @@ object ThreadStopwatch {
     override def initialValue() = None
   }
 
-  def apply(clock: Clock = Clock.systemDefaultZone()) = new ThreadStopwatch(clock)
-
   def time[I, O](input: I)(work: => O): O = {
     if (ThreadStopwatch.threadLocalResult.get().isDefined) {
-      new ThreadStopwatch().time(input)(work).output.get
+      timeWithResults(input)(work).output.get
     } else {
       work
     }
   }
-}
 
-class ThreadStopwatch(clock: Clock = Clock.systemDefaultZone()) {
-
-  def time[I, O](input: I)(work: => O): StopwatchResult[I, O] = {
+  def timeWithResults[I, O](input: I, clock: Clock = Clock.systemDefaultZone())(work: => O): StopwatchResult[I, O] = {
 
     val parentResultOption = ThreadStopwatch.threadLocalResult.get()
     val clockToUse = parentResultOption.map(_.clock).getOrElse(clock)
@@ -35,7 +30,7 @@ class ThreadStopwatch(clock: Clock = Clock.systemDefaultZone()) {
     val result = Try(work)
 
     val stopwatchResult = mutableResult.complete(result).toImmutable
-    parentResultOption.map { _.subResults.append(stopwatchResult) }
+    parentResultOption.foreach { _.subResults.append(stopwatchResult) }
 
     ThreadStopwatch.threadLocalResult.set(parentResultOption)
     stopwatchResult

@@ -135,6 +135,39 @@ class ThreadStopwatchTests extends FunSuite {
       )
     ))
   }
+
+  test("nested returning time calls") {
+
+    val start = Instant.now()
+    val clock = new MutableFixedClock(start)
+    val stopwatch = ThreadStopwatch(clock)
+
+    val result = stopwatch.time("top work") {
+      clock.fastForward(ofSeconds(1))
+      stopwatch.time("child work 1") {
+        clock.fastForward(ofSeconds(1))
+        "child result 1"
+      }
+      clock.fastForward(ofSeconds(1))
+      "top result"
+    }
+
+    assert(result == StopwatchResult(
+      start = start,
+      end = start.plusSeconds(3),
+      input = "top work",
+      output = Success("top result"),
+      List(
+        StopwatchResult(
+          start = start.plusSeconds(1),
+          end = start.plusSeconds(2),
+          input = "child work 1",
+          output = Success("child result 1"),
+          Nil
+        )
+      )
+    ))
+  }
 }
 
 

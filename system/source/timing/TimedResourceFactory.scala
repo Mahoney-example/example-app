@@ -2,25 +2,28 @@ package uk.org.lidalia
 package exampleapp.system.timing
 
 import java.time.Clock
+import java.util.UUID
 
 import ThreadStopwatch.timeWithResults
 import ThreadStopwatch.time
 import scalalang.ResourceFactory
-import uk.org.lidalia.exampleapp.system.timing.TimedResourceFactory.{noOpTimingNotifier, TimingNotifier}
+import uk.org.lidalia.exampleapp.system.timing.TimedResourceFactory.{noop, TimingConsumer}
 
 object TimedResourceFactory {
-  type TimingNotifier = (StopwatchResult[_,_]) => Unit
-  val noOpTimingNotifier: TimingNotifier = (res) => {}
+
+  type TimingConsumer = (StopwatchResult[_,_]) => Unit
+
+  val noop = { _:Any => }
 
   def timed[R](
     decorated: ResourceFactory[R],
-    timingNotifier: TimingNotifier = noOpTimingNotifier,
+    timingConsumer: TimingConsumer = noop,
     clock: Clock = Clock.systemDefaultZone(),
     name: ?[String] = None
   ): ResourceFactory[R] = {
     new TimedResourceFactory[R](
       decorated,
-      timingNotifier,
+      timingConsumer,
       clock,
       name
     )
@@ -29,7 +32,7 @@ object TimedResourceFactory {
 
 private class TimedResourceFactory[+R] private (
   decorated: ResourceFactory[R],
-  timingNotifier: TimingNotifier = noOpTimingNotifier,
+  timingConsumer: TimingConsumer = noop,
   clock: Clock = Clock.systemDefaultZone(),
   name: ?[String] = None
 ) extends ResourceFactory[R] {
@@ -40,13 +43,13 @@ private class TimedResourceFactory[+R] private (
 
     val result = timeWithResults(timingName+".Total", clock) {
       decorated.using { resource =>
-        time(timingName+"."+resource+".Usage", clock) {
+        time(timingName+"."+resource+".Usage") {
           work(resource)
         }
       }
     }
 
-    timingNotifier(result)
+    timingConsumer(result)
 
     result.output.get
   }

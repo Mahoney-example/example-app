@@ -25,21 +25,11 @@ object EnvironmentDefinition {
     stub1Definition: StubHttpServerFactory = StubHttpServerFactory(),
     databaseDefinition: ResourceFactory[HsqlDatabase] = HsqlDatabaseDefinition(changeLog(userProfileTableCreation))
   ) = {
-
-    val initialisingDbDefinition = new ResourceFactory[HsqlDatabase] {
-      override def using[T](work: (HsqlDatabase) => T): T = {
-        databaseDefinition.using { database =>
-          database.update()
-          work(database)
-        }
-      }
-    }
-
     new EnvironmentDefinition(
       ports,
       loggerFactory,
       stub1Definition,
-      initialisingDbDefinition
+      databaseDefinition
     )
   }
 }
@@ -61,6 +51,8 @@ class EnvironmentDefinition private (
       stub1Definition,
       databaseDefinition
     ) { (stub1, database) =>
+
+      database.update()
 
       val appConfig = ApplicationConfig(
         sendGridUrl = stub1.localAddress,

@@ -1,14 +1,13 @@
 package uk.org.lidalia
 package exampleapp.tests.support
 
-import org.scalatest.{Args, Status, Suite}
+import org.scalatest.{ConfigMap, Args, Status, Suite}
+import uk.org.lidalia.exampleapp.system.display.DisplayFactory
 import uk.org.lidalia.scalalang.ResourceFactory
 
 trait FixtureProvider[R] extends Suite {
 
-  type FixtureParam = R
-
-  protected val metaFactory: ResourceFactory[ResourceFactory[R]]
+  protected def metaFactory(config: ConfigMap): ResourceFactory[ResourceFactory[R]]
 
   protected lazy val configKey = classOf[FixtureProvider[_]].getName
 
@@ -17,7 +16,7 @@ trait FixtureProvider[R] extends Suite {
     if (args.configMap.contains(configKey)) {
       super.run(testName, args)
     } else {
-      metaFactory.using { factory =>
+      metaFactory(args.configMap).using { factory =>
         super.run(testName, args.copy(configMap = args.configMap.+(configKey -> factory)))
       }
     }
@@ -25,6 +24,8 @@ trait FixtureProvider[R] extends Suite {
 }
 
 trait FixtureSuite[R] extends FixtureProvider[R] with org.scalatest.fixture.Suite {
+
+  override type FixtureParam = R
 
   override protected def withFixture(test: OneArgTest) = {
 

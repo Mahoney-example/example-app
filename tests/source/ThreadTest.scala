@@ -19,6 +19,3 @@ object ThreadTest {
     thread.join()
   }
 }
-
-
-

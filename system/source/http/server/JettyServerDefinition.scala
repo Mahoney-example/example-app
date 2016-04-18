@@ -5,16 +5,14 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 
 import org.eclipse.jetty.{server => jetty}
 import jetty.handler.AbstractHandler
-import uk.org.lidalia.http.core.{RequestUri, Method, Request, Http}
-import uk.org.lidalia.net.Port
+import uk.org.lidalia.http.core.{Response, RequestUri, Method, Request, Http}
+import net.{Url, Port}
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.ResourceFactory._try
 
-import scala.concurrent.Future
-
 class JettyServerDefinition(
-  port: ?[Port],
-  http: Http[Future]
+  http: Http[Response],
+  port: ?[Port] = None
 ) extends ResourceFactory[JettyServer]{
 
   override def using[T](work: (JettyServer) => T): T = {
@@ -30,7 +28,7 @@ class JettyServerDefinition(
       ): Unit = {
         val request = Request(
           Method(baseRequest.getMethod),
-          RequestUri(baseRequest.getPathInfo),
+          adaptRequestUri(httpServletRequest),
           List()
         )
         val response = http.execute(request)
@@ -46,8 +44,15 @@ class JettyServerDefinition(
       server.join()
     }
   }
+
+  def adaptRequestUri[T](httpServletRequest: HttpServletRequest): RequestUri = {
+    RequestUri(
+      httpServletRequest.getRequestURI +
+      (if (httpServletRequest.getQueryString != null) "?" + httpServletRequest.getQueryString else "")
+    )
+  }
 }
 
 class JettyServer private[server] (server: jetty.Server) {
-
+  val baseUrl = Url(server.getURI.toASCIIString)
 }

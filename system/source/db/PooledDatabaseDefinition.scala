@@ -4,7 +4,7 @@ package system.db
 
 import com.zaxxer.hikari.HikariDataSource
 import scalalang.ResourceFactory
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 
 object PooledDatabaseDefinition {
 

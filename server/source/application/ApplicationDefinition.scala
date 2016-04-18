@@ -4,7 +4,7 @@ package server.application
 
 import org.slf4j.Logger
 import scalalang.ResourceFactory
-import scalalang.ResourceFactory._try
+import scalalang.TryFinally._try
 import server.services.Services
 import server.services.email.HttpEmailService
 import server.services.profiles.DbUserProfileService

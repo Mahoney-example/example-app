@@ -7,7 +7,7 @@ import javax.sql.DataSource
 
 import liquibase.changelog.DatabaseChangeLog
 import uk.org.lidalia.scalalang.ResourceFactory
-import ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 
 object Database {
 

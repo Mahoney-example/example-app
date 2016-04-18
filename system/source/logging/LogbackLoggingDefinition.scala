@@ -12,7 +12,7 @@ import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
 import org.slf4j.Logger
 import scalalang.ResourceFactory
 import uk.org.lidalia.exampleapp.system.logging.StaticLoggerFactory.factory
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 
 object LogbackLoggingDefinition {
 

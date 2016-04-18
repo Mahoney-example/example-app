@@ -8,7 +8,7 @@ import jetty.handler.AbstractHandler
 import uk.org.lidalia.http.core.{Response, RequestUri, Method, Request, Http}
 import net.{Url, Port}
 import uk.org.lidalia.scalalang.ResourceFactory
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 
 class JettyServerDefinition(
   http: Http[Response],

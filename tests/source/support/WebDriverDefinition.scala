@@ -14,7 +14,7 @@ import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.system.display.Display
 import uk.org.lidalia.exampleapp.tests.support.WebDriverDefinition.driverFile
 import uk.org.lidalia.scalalang.ResourceFactory
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 import uk.org.lidalia.scalalang.os.OsFamily
 
 import collection.JavaConversions.mapAsJavaMap

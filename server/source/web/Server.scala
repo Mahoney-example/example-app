@@ -5,7 +5,7 @@ import java.net.ServerSocket
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.server.application.Application
 import uk.org.lidalia.scalalang.Reusable
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 import uk.org.lidalia.net.Port
 
 case class Server(

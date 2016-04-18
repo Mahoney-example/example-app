@@ -8,7 +8,7 @@ import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.system.db.JdbcConfig
 import uk.org.lidalia.net.Uri
 import uk.org.lidalia.scalalang.ResourceFactory
-import uk.org.lidalia.scalalang.ResourceFactory._try
+import uk.org.lidalia.scalalang.TryFinally._try
 
 object HsqlDatabaseDefinition {
 

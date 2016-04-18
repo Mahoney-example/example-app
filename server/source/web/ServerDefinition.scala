@@ -4,7 +4,7 @@ package server.web
 
 import org.slf4j.Logger
 import scalalang.ResourceFactory
-import ResourceFactory._try
+import scalalang.TryFinally._try
 import server.application.ApplicationDefinition
 import system.blockUntilShutdown
 import system.logging.{StaticLoggerFactory, LoggerFactory}

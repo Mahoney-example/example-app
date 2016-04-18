@@ -2,18 +2,16 @@ package uk.org.lidalia
 package exampleapp.system.timing
 
 import java.time.Clock
-import java.util.UUID
 
 import ThreadStopwatch.timeWithResults
 import ThreadStopwatch.time
+import scalalang.NoOpValues.noop
 import scalalang.ResourceFactory
-import uk.org.lidalia.exampleapp.system.timing.TimedResourceFactory.{noop, TimingConsumer}
+import uk.org.lidalia.exampleapp.system.timing.TimedResourceFactory.TimingConsumer
 
 object TimedResourceFactory {
 
   type TimingConsumer = (StopwatchResult[_,_]) => Unit
-
-  val noop = { _:Any => }
 
   def timed[R](
     decorated: ResourceFactory[R],

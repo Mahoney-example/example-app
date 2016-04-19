@@ -4,6 +4,7 @@ package exampleapp.tests.support
 import ch.qos.logback.classic.Level.INFO
 import org.scalatest.ConfigMap
 import org.slf4j.LoggerFactory
+import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
 import uk.org.lidalia.exampleapp.system.display.{Display, DisplayFactory}
 import uk.org.lidalia.scalalang.{PoolFactory, ResourceFactory}
 
@@ -30,4 +31,9 @@ with LoggingConfiguredSuite
   override protected val logLevels = List(
     "uk.org.lidalia" -> INFO
   )
+}
+
+
+class Something extends ResourceFactory[(ResourceFactory[Environment], ResourceFactory[ReusableWebDriver])] {
+  override def using[T](work: ((ResourceFactory[Environment], ResourceFactory[ReusableWebDriver])) => T): T = ???
 }

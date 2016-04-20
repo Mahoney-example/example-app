@@ -66,7 +66,7 @@ class EnvironmentDefinition private (
         work(Environment(
           stub1,
           database,
-          servers
+          servers.toList
         ))
       }
     }

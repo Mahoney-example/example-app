@@ -2,48 +2,38 @@ package uk.org.lidalia
 package exampleapp
 package server.web
 
-import org.slf4j.Logger
 import scalalang.ResourceFactory
 import scalalang.TryFinally._try
-import server.application.ApplicationDefinition
-import system.blockUntilShutdown
-import system.logging.{StaticLoggerFactory, LoggerFactory}
+import server.application.Application
+import uk.org.lidalia.exampleapp.system.http.server.JettyServerDefinition
+import uk.org.lidalia.http.core.{Code, Entity, HeaderField, Http, Request, Response, StringEntity}
 
 object ServerDefinition {
 
   def apply(
     config: ServerConfig,
-    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory
-  ) = new ServerDefinition(config, loggerFactory)
+    application: Application
+  ) = new ServerDefinition(config, application)
 
 }
 
 class ServerDefinition private (
   config: ServerConfig,
-  loggerFactory: LoggerFactory[Logger]
+  val application: Application
 ) extends ResourceFactory[Server] {
-
-  val applicationDefinition = ApplicationDefinition(
-    config.applicationConfig,
-    loggerFactory
-  )
-
-  def runUntilShutdown(): Unit = {
-    using(blockUntilShutdown)
-  }
 
   override def using[T](work: (Server) => T): T = {
 
-    applicationDefinition.using { application =>
-
-      val server = Server(application, config)
-
-      _try {
-        server.start()
-        work(server)
-      } _finally {
-        server.stop()
-      }
+    JettyServerDefinition(toHttp(application), config.localPort).using { jettyServer =>
+      work(Server(application, jettyServer))
     }
+  }
+
+  private def toHttp(application: Application): Http[Response] = new Http[Response] {
+    override def execute[A, C](request: Request[A, C]) = Response(
+      Code.OK,
+      List(HeaderField("Foo", "foo1"), HeaderField("Foo", "foo2")),
+      new StringEntity("Hello World!\nGood to see you\n").asInstanceOf[Entity[A]]
+    )
   }
 }

@@ -1,5 +1,5 @@
 package uk.org.lidalia
-package exampleapp
+package exampleapp.server
 
 import uk.org.lidalia.exampleapp.server.application.ApplicationConfig
 import uk.org.lidalia.exampleapp.server.web.ServerConfig

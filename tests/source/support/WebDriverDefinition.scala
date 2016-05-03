@@ -32,7 +32,7 @@ object WebDriverDefinition {
 
   def getResourceAsFile(fileName: String): File = {
     val url = Thread.currentThread().getContextClassLoader.getResource(fileName)
-    try {
+    val driverFile = try {
       new File(url.toURI)
     } catch {
       case e: Exception =>
@@ -42,6 +42,9 @@ object WebDriverDefinition {
         Files.copy(in, tempFile.toPath)
         tempFile
     }
+
+    driverFile.setExecutable(true)
+    driverFile
   }
 
   def main(args: Array[String]) {

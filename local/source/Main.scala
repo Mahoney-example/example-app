@@ -2,6 +2,8 @@ package uk.org.lidalia
 package exampleapp
 package local
 
+import java.time.Instant
+
 import ch.qos.logback.classic.Level
 import org.slf4j.Logger.ROOT_LOGGER_NAME
 import server.services.profiles.userProfileTableCreation
@@ -16,6 +18,8 @@ object Main {
 
   def main(args: Array[String]) {
 
+    println(Instant.now())
+
     val logbackLoggingDefinition = LogbackLoggingDefinition(
       ROOT_LOGGER_NAME -> Level.WARN,
       "uk.org.lidalia.exampleapp" -> Level.INFO,
@@ -24,14 +28,20 @@ object Main {
 
     logbackLoggingDefinition.using { loggerFactory =>
 
+      println(Instant.now())
+
       FastLiquibase()
 
+      println(Instant.now())
+
       val environment = EnvironmentDefinition(
-        List(Port(8080)),
+        List(Port(8080), Port(8081)),
         loggerFactory,
         StubHttpServerFactory(Port(8082)),
         HsqlDatabaseDefinition(changeLog(userProfileTableCreation), "local")
       )
+
+      println(Instant.now())
 
       environment.runUntilShutdown()
     }

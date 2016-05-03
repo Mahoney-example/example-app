@@ -3,18 +3,17 @@ package exampleapp
 package local
 
 import org.slf4j.Logger
-import server.application.ApplicationConfig
+import server.application.{ApplicationConfig, ApplicationDefinition}
 import server.services.profiles.userProfileTableCreation
-import server.web.{ServerDefinition, ServerConfig}
+import server.web.ServerConfig
 import system.db.changelog.Migrator.changeLog
 import system.db.hsqldb.{HsqlDatabase, HsqlDatabaseDefinition}
 import system.blockUntilShutdown
 import net.Port
-
 import scalalang.ResourceFactory
 import ResourceFactory.usingAll
-import system.logging.{StaticLoggerFactory, LoggerFactory}
-
+import system.logging.{LoggerFactory, StaticLoggerFactory}
+import uk.org.lidalia.exampleapp.server.ProcessDefinition
 import uk.org.lidalia.stubhttp.StubHttpServerFactory
 
 object EnvironmentDefinition {
@@ -60,7 +59,9 @@ class EnvironmentDefinition private (
         jdbcConfig = database.jdbcConfig
       )
 
-      val serverDefinitions = ports.map(port => ServerDefinition(ServerConfig(appConfig, port), loggerFactory))
+      val serverDefinitions = ports.map { port =>
+        ProcessDefinition(ApplicationDefinition(appConfig, loggerFactory), ServerConfig(appConfig, port))
+      }
 
       usingAll(serverDefinitions:_*) { servers =>
         work(Environment(

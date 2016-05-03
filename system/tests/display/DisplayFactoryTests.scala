@@ -1,10 +1,9 @@
 package uk.org.lidalia
 package exampleapp.system.display
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Tag}
 import scalalang.ResourceFactory
-import scalalang.os.Windows
-import scalalang.os.Linux
+import scalalang.os.{Linux, OsFamily, Windows}
 
 import util.Random
 
@@ -30,7 +29,7 @@ class DisplayFactoryTests extends FunSuite {
     assert(outcome == (None, expectedOutcome))
   }
 
-  test("creates a display") {
+  testOnLinux("creates a display") {
 
     val expectedOutcome = Random.nextInt()
 
@@ -42,4 +41,11 @@ class DisplayFactoryTests extends FunSuite {
     assert(outcome._2 == expectedOutcome)
   }
 
+  def testOnLinux(testName: String, testTags: Tag*)(testFun: => Unit): Unit = {
+    if (OsFamily() == Linux) {
+      test(testName, testTags:_*)(testFun)
+    } else {
+      ignore(testName)(testFun)
+    }
+  }
 }

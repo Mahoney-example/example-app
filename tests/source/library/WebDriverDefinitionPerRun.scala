@@ -1,7 +1,6 @@
 package uk.org.lidalia.exampleapp.tests.library
 
 import org.scalatest.ConfigMap
-import uk.org.lidalia.exampleapp.tests.support.{ReusableWebDriver, WebDriverDefinition}
 import uk.org.lidalia.scalalang.PoolFactory
 
 trait WebDriverDefinitionPerRun extends OnePerRun {

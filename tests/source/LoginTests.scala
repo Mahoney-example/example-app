@@ -1,14 +1,22 @@
 package uk.org.lidalia
 package exampleapp.tests
 
-import org.slf4j.LoggerFactory
+import library.{Page, PageFactory, ReusableWebDriver, WebDriverWithBaseUrl}
+import uk.org.lidalia.exampleapp.local.Environment
+import uk.org.lidalia.exampleapp.tests.pages.LoginPage
 import uk.org.lidalia.exampleapp.tests.support.BrowserFunctionalTests
+import uk.org.lidalia.net.Scheme.http
+import uk.org.lidalia.net._
 
 class LoginTests extends BrowserFunctionalTests {
 
-  Range(1, 15).foreach { index =>
-    test(s"login $index") { environment =>
-      LoggerFactory.getLogger(classOf[LoginTests]).info(s"Test $index in progress")
+    test("can login via the browser") { case (env, browser) =>
+
+
+      // given
+//        user("Joe").existsInSystem()
+      // when
+        browser.to(LoginPage)
+      // then
     }
-  }
 }

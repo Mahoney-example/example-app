@@ -1,23 +1,22 @@
 package uk.org.lidalia
-package exampleapp.tests.support
+package exampleapp
+package tests
+package library
 
-import java.io.{File, FileOutputStream}
-import java.net.URL
+import java.io.File
 import java.nio.file.Files
 
-import org.apache.commons.io.IOUtils
-import org.apache.commons.io.IOUtils.copy
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeDriverService.Builder
 import org.slf4j.LoggerFactory
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.system.display.Display
-import uk.org.lidalia.exampleapp.tests.support.WebDriverDefinition.driverFile
+import uk.org.lidalia.exampleapp.tests.library.WebDriverDefinition.driverFile
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.TryFinally._try
 import uk.org.lidalia.scalalang.os.OsFamily
 
-import collection.JavaConversions.mapAsJavaMap
+import scala.collection.JavaConversions.mapAsJavaMap
 
 object WebDriverDefinition {
 

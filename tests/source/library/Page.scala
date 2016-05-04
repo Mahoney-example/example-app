@@ -1,0 +1,15 @@
+package uk.org.lidalia
+package exampleapp.tests
+package library
+
+import uk.org.lidalia.net.Url
+
+trait PageFactory[P <: Page[P]] {
+
+  def url: Url
+  def apply(reusableWebDriver: ReusableWebDriver): P
+}
+
+trait Page[P <: Page[P]] {
+
+}

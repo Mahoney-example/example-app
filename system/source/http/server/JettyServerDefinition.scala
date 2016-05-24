@@ -10,6 +10,7 @@ import uk.org.lidalia.http.core.{EmptyEntity, HeaderField, Http, Method, Request
 import net.{Port, Url}
 import org.apache.commons.io.IOUtils
 import org.eclipse.jetty.server.ServerConnector
+import org.eclipse.jetty.util.thread.QueuedThreadPool
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.TryFinally._try
@@ -28,7 +29,11 @@ class JettyServerDefinition private (
 
   override def using[T](work: (JettyServer) => T): T = {
 
-    val server: jetty.Server = new jetty.Server(port.map(_.portNumber).getOrElse(0))
+    val threadPool = new QueuedThreadPool(4)
+    val server = new jetty.Server(threadPool)
+    val connector = new ServerConnector(server, 1, 2)
+    connector.setPort(port.map(_.portNumber).getOrElse(0))
+    server.setConnectors(Array(connector))
     server.setHandler(new AbstractHandler {
 
       override def handle(

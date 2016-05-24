@@ -8,9 +8,10 @@ import uk.org.lidalia.scalalang.ResourceFactory.usingAll
 
 trait BrowserFunctionalTests
 extends fixture.FunSuite
+with LogbackLoggerFactoryPerRun
 with EnvironmentDefinitionPerRun
 with WebDriverDefinitionPerRun
-with LogbackLoggerFactoryPerRun {
+{
 
   override type FixtureParam = (Environment, WebDriverWithBaseUrl)
 

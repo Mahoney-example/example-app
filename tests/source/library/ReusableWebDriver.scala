@@ -49,6 +49,11 @@ object WebDriverWithBaseUrl {
 }
 
 class WebDriverWithBaseUrl private (reusableWebDriver: ReusableWebDriver, baseUrl: Url) {
+  def at[P <: Page[P]](pageFactory: PageFactory[P]): P = {
+    def page = pageFactory(reusableWebDriver)
+    assert(page.isCurrentPage)
+    page
+  }
 
   def to[P <: Page[P]](pageFactory: PageFactory[P]): P = {
     reusableWebDriver.get(baseUrl.resolve(pageFactory.url).toString)

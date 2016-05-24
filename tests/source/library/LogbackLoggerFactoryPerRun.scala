@@ -8,7 +8,7 @@ trait LogbackLoggerFactoryPerRun extends OnePerRun {
 
   private val key = "LoggerContext"
 
-  register(key, LogbackLoggingDefinition(
+  registerSerial(key, LogbackLoggingDefinition(
     "uk.org.lidalia" -> INFO
   ))
 

@@ -12,6 +12,8 @@ import liquibase.resource.ClassLoaderResourceAccessor
 
 object Migrator {
 
+  FastLiquibase()
+
   def apply(
     changelog: DatabaseChangeLog,
     database: Database

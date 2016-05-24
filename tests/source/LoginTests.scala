@@ -1,22 +1,34 @@
 package uk.org.lidalia
 package exampleapp.tests
 
-import library.{Page, PageFactory, ReusableWebDriver, WebDriverWithBaseUrl}
-import uk.org.lidalia.exampleapp.local.Environment
-import uk.org.lidalia.exampleapp.tests.pages.LoginPage
+import java.time.Instant
+
+import pages.{LoggedInPage, LoginPage}
 import uk.org.lidalia.exampleapp.tests.support.BrowserFunctionalTests
-import uk.org.lidalia.net.Scheme.http
-import uk.org.lidalia.net._
 
 class LoginTests extends BrowserFunctionalTests {
 
-    test("can login via the browser") { case (env, browser) =>
+  test("can login via the browser") { case (env, browser) =>
 
+    println(s"${Instant.now()} Test start")
 
-      // given
-//        user("Joe").existsInSystem()
-      // when
-        browser.to(LoginPage)
-      // then
-    }
+    // given
+      user("Joe").exists()
+
+    // when
+      val loginPage = browser.to(LoginPage)
+      loginPage.loginButton.click()
+
+    // then
+      val loggedInPage = browser.at(LoggedInPage)
+      assert(
+        loggedInPage.welcomeMessage.contains("Joe")
+      )
+  }
+
+  def user(username: String): User = new User(username)
+
+  case class User(name: String) {
+    def exists() = Unit
+  }
 }

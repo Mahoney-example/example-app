@@ -12,4 +12,10 @@ trait PageFactory[P <: Page[P]] {
 
 trait Page[P <: Page[P]] {
 
+  val driver: ReusableWebDriver
+
+  def title = driver.getTitle
+
+  def isCurrentPage: Boolean
+
 }

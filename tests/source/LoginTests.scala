@@ -1,30 +1,38 @@
 package uk.org.lidalia
-package exampleapp.tests
-
-import java.time.Instant
+package exampleapp
+package tests
 
 import pages.{LoggedInPage, LoginPage}
-import uk.org.lidalia.exampleapp.tests.support.BrowserFunctionalTests
+import local.{Environment, EnvironmentDefinition}
+import library.{ReusableWebDriver, WebDriverDefinition}
+import support.BrowserFunctionalTests
+import scalalang.ResourceFactory
 
-class LoginTests extends BrowserFunctionalTests {
+class LoginTests(
+  envFactory: ResourceFactory[Environment],
+  webDriverFactory: ResourceFactory[ReusableWebDriver]
+) extends BrowserFunctionalTests(
+  envFactory,
+  webDriverFactory
+) {
 
   test("can login via the browser") { case (env, browser) =>
 
-    println(s"${Instant.now()} Test start")
-
     // given
-      user("Joe").exists()
+    user("Joe").exists()
 
     // when
-      val loginPage = browser.to(LoginPage)
-      loginPage.loginButton.click()
+    val loginPage = browser.to(LoginPage)
+    loginPage.loginButton.click()
 
     // then
-      val loggedInPage = browser.at(LoggedInPage)
-      assert(
-        loggedInPage.welcomeMessage.contains("Joe")
-      )
+    val loggedInPage = browser.at(LoggedInPage)
+    assert(
+      loggedInPage.welcomeMessage.contains("Joe")
+    )
   }
+
+  def this() = this(EnvironmentDefinition(), WebDriverDefinition())
 
   def user(username: String): User = new User(username)
 

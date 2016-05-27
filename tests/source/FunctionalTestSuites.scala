@@ -1,12 +1,11 @@
 package uk.org.lidalia
 package exampleapp.tests
 
-import ch.qos.logback.classic.Level.INFO
 import org.scalatest.{Args, Status, Suite, Suites}
-import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
-import uk.org.lidalia.exampleapp.tests.library.{ReusableWebDriver, WebDriverDefinition}
-import uk.org.lidalia.scalalang.{PoolFactory, ResourceFactory}
+import uk.org.lidalia.exampleapp.local.Environment
+import uk.org.lidalia.exampleapp.tests.library.ReusableWebDriver
+import uk.org.lidalia.exampleapp.tests.support.FunctionalTestEnvironment
+import uk.org.lidalia.scalalang.ResourceFactory
 
 class FunctionalTestSuites extends Suite {
 
@@ -19,13 +18,8 @@ class FunctionalTestSuites extends Suite {
   )
 
   override def run(testName: Option[String], args: Args): Status = {
-    LogbackLoggingDefinition("uk.org.lidalia" -> INFO).using { loggerFactory =>
-      ResourceFactory.usingAll(
-        PoolFactory(EnvironmentDefinition(loggerFactory = loggerFactory)),
-        PoolFactory(WebDriverDefinition())
-      ) { (envFactory, webDriverFactory) =>
-        new Suites(suites(envFactory, webDriverFactory):_*).run(testName, args)
-      }
+    FunctionalTestEnvironment().using { factories =>
+      new Suites(suites(factories._1, factories._2):_*).run(testName, args)
     }
   }
 }

@@ -1,4 +1,5 @@
-package uk.org.lidalia.exampleapp.system.db.hsqldb
+package uk.org.lidalia
+package exampleapp.system.db.hsqldb
 
 import liquibase.changelog.DatabaseChangeLog
 import org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric
@@ -14,7 +15,7 @@ object HsqlDatabaseDefinition {
 
   def apply(
     changelog: DatabaseChangeLog,
-    name: String = randomAlphanumeric(5)
+    name: ?[String] = None
   ) = {
     new HsqlDatabaseDefinition(changelog, name)
   }
@@ -22,11 +23,11 @@ object HsqlDatabaseDefinition {
 
 class HsqlDatabaseDefinition private (
   changelog: DatabaseChangeLog,
-  name: String
+  name: ?[String]
 ) extends ResourceFactory[HsqlDatabase] with HasLogger {
 
-  private val jdbcConfig = JdbcConfig(
-    Uri(s"jdbc:hsqldb:mem:$name"),
+  private def jdbcConfig(dbName: String) = JdbcConfig(
+    Uri(s"jdbc:hsqldb:mem:$dbName"),
     "sa",
     "",
     "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
@@ -34,11 +35,12 @@ class HsqlDatabaseDefinition private (
 
   override def using[T](work: (HsqlDatabase) => T): T = {
 
-    val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, name, new HsqlProperties)
+    val dbName = name.getOrElse(randomAlphanumeric(5))
+
+    val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, dbName, new HsqlProperties)
     log.info(s"Created database $name")
 
-    val database = HsqlDatabase(jdbcConfig, changelog)
-
+    val database = HsqlDatabase(jdbcConfig(dbName), changelog)
 
     _try {
 

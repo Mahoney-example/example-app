@@ -12,10 +12,10 @@ class BrowserFunctionalTestsRunner(
   suiteBuilder: (ResourceFactory[Environment], ResourceFactory[ReusableWebDriver]) => Suite
 ) extends App {
 
-  FunctionalTestEnvironment().using { factories =>
+  FunctionalTestEnvironmentFactory().using { factories =>
     suiteBuilder(
-      factories._1,
-      factories._2
+      factories.environmentFactory,
+      factories.webDriverFactory
     ).execute(durations = true, fullstacks = true, stats = true)
   }
 }

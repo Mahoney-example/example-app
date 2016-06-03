@@ -38,7 +38,7 @@ class HsqlDatabaseDefinition private (
     val dbName = name.getOrElse(randomAlphanumeric(5))
 
     val db = DatabaseManager.getDatabase(DatabaseURL.S_MEM, dbName, new HsqlProperties)
-    log.info(s"Created database $name")
+    log.info(s"Created database $dbName")
 
     val database = HsqlDatabase(jdbcConfig(dbName), changelog)
 
@@ -56,7 +56,7 @@ class HsqlDatabaseDefinition private (
       work(database)
     } _finally {
       db.close(0)
-      log.info(s"Deleted database $name")
+      log.info(s"Deleted database $dbName")
     }
   }
 }

@@ -29,6 +29,7 @@
     <module>system</module>
     <module>server</module>
     <module>local</module>
+    <module>client</module>
     <module>tests</module>
   </modules>
 

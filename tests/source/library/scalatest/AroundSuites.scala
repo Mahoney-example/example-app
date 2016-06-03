@@ -40,4 +40,7 @@ abstract class AroundSuites[R](resourceData: Either[ResourceFactory[R], R]) exte
       suites(resource): _*
     ).run(testName, args)
   }
+
+  def this(resourceFactory: ResourceFactory[R]) = this(Left(resourceFactory))
+
 }

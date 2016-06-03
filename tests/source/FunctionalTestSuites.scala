@@ -6,7 +6,7 @@ import uk.org.lidalia.exampleapp.tests.api.ApiTestSuites
 import uk.org.lidalia.exampleapp.tests.support.{FunctionalTestEnvironment, FunctionalTestEnvironmentFactory}
 import uk.org.lidalia.exampleapp.tests.website.WebsiteTestSuites
 
-class FunctionalTestSuites extends AroundSuites(Left(FunctionalTestEnvironmentFactory())) {
+class FunctionalTestSuites extends AroundSuites(FunctionalTestEnvironmentFactory()) {
 
   override def suites(factories: FunctionalTestEnvironment) = List(
     new ApiTestSuites(factories),

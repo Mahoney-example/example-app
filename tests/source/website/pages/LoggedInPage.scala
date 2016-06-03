@@ -1,9 +1,9 @@
 package uk.org.lidalia
 package exampleapp.tests
-package pages
+package website.pages
 
 import org.openqa.selenium.By
-import uk.org.lidalia.exampleapp.tests.library.{Page, PageFactory, ReusableWebDriver}
+import uk.org.lidalia.exampleapp.tests.library.webdriver.{Page, PageFactory, ReusableWebDriver}
 import uk.org.lidalia.net.Path
 
 object LoggedInPage extends PageFactory[LoggedInPage] {

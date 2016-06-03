@@ -1,14 +1,15 @@
 package uk.org.lidalia
 package exampleapp.tests
 
-import uk.org.lidalia.exampleapp.tests.library.AroundSuites
-import uk.org.lidalia.exampleapp.tests.support.{FunctionalTestEnvironmentFactory, FunctionalTestEnvironment}
+import library.scalatest.AroundSuites
+import uk.org.lidalia.exampleapp.tests.api.ApiTestSuites
+import uk.org.lidalia.exampleapp.tests.support.{FunctionalTestEnvironment, FunctionalTestEnvironmentFactory}
+import uk.org.lidalia.exampleapp.tests.website.WebsiteTestSuites
 
-class FunctionalTestSuites extends AroundSuites(FunctionalTestEnvironmentFactory()) {
+class FunctionalTestSuites extends AroundSuites(Left(FunctionalTestEnvironmentFactory())) {
 
   override def suites(factories: FunctionalTestEnvironment) = List(
-
-    new LoginTests(factories.environmentFactory, factories.webDriverFactory),
-    new RegisterTests(factories.environmentFactory, factories.webDriverFactory)
+    new ApiTestSuites(factories),
+    new WebsiteTestSuites(factories)
   )
 }

@@ -1,8 +1,9 @@
 package uk.org.lidalia
-package exampleapp.tests
-package library
+package exampleapp
+package tests
+package library.webdriver
 
-import uk.org.lidalia.net.{UriReference, Url}
+import uk.org.lidalia.net.UriReference
 
 trait PageFactory[P <: Page[P]] {
 

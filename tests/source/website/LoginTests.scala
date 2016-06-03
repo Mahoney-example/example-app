@@ -1,10 +1,10 @@
 package uk.org.lidalia
 package exampleapp
-package tests
+package tests.website
 
+import tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
 import pages.{LoggedInPage, LoginPage}
 import local.{Environment, EnvironmentDefinition}
-import library.{ReusableWebDriver, WebDriverDefinition}
 import support.BrowserFunctionalTests
 import scalalang.ResourceFactory
 

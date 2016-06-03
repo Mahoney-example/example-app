@@ -1,10 +1,10 @@
 package uk.org.lidalia
-package exampleapp.tests
+package exampleapp.tests.website
 
 import org.slf4j.LoggerFactory
 import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.tests.library.{ReusableWebDriver, WebDriverDefinition}
-import uk.org.lidalia.exampleapp.tests.support.BrowserFunctionalTests
+import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
+import uk.org.lidalia.exampleapp.tests.website.support.BrowserFunctionalTests
 import uk.org.lidalia.scalalang.ResourceFactory
 
 class RegisterTests(

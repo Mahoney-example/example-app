@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp
 package tests
-package library
+package library.webdriver
 
 import java.io.File
 import java.nio.file.Files
@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriverService.Builder
 import org.slf4j.LoggerFactory
 import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.exampleapp.system.display.Display
-import uk.org.lidalia.exampleapp.tests.library.WebDriverDefinition.driverFile
+import uk.org.lidalia.exampleapp.tests.library.webdriver.WebDriverDefinition.driverFile
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.TryFinally._try
 import uk.org.lidalia.scalalang.os.OsFamily

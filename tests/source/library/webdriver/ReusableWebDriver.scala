@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp
 package tests
-package library
+package library.webdriver
 
 import org.openqa.selenium.{By, WebDriver}
 import uk.org.lidalia.net.Host.localhost

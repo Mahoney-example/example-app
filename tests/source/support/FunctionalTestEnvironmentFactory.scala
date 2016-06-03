@@ -4,9 +4,10 @@ package tests
 package support
 
 import ch.qos.logback.classic.Level
+import org.slf4j.Logger
 import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.system.logging.{LogbackLoggerFactory, LogbackLoggingDefinition}
-import uk.org.lidalia.exampleapp.tests.library.{ReusableWebDriver, WebDriverDefinition}
+import uk.org.lidalia.exampleapp.system.logging.{LogbackLoggerFactory, LogbackLoggingDefinition, LoggerFactory, StaticLoggerFactory}
+import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
 import uk.org.lidalia.scalalang.{Pool, PoolFactory, ResourceFactory}
 
 object FunctionalTestEnvironmentFactory {
@@ -29,7 +30,7 @@ class FunctionalTestEnvironmentFactory private()
 }
 
 case class FunctionalTestEnvironment(
-  loggerFactory: LogbackLoggerFactory,
-  environmentFactory: Pool[Environment],
-  webDriverFactory: Pool[ReusableWebDriver]
+  loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
+  environmentFactory: ResourceFactory[Environment] = EnvironmentDefinition(),
+  webDriverFactory: ResourceFactory[ReusableWebDriver] = WebDriverDefinition()
 )

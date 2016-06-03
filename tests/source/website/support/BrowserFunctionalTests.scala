@@ -1,11 +1,10 @@
 package uk.org.lidalia
 package exampleapp
-package tests
-package support
+package tests.website.support
 
 import org.scalatest.{Outcome, fixture}
 import uk.org.lidalia.exampleapp.local.Environment
-import uk.org.lidalia.exampleapp.tests.library.{ReusableWebDriver, WebDriverWithBaseUrl}
+import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverWithBaseUrl}
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.ResourceFactory.usingAll
 

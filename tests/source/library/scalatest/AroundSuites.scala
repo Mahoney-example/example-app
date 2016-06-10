@@ -24,7 +24,7 @@ abstract class AroundSuites[R](resourceData: Either[ResourceFactory[R], R]) exte
     )
   }
 
-  def runUsingResource(testName: Option[String], args: Args, resourceFactory: ResourceFactory[R]): Status = {
+  private def runUsingResource(testName: Option[String], args: Args, resourceFactory: ResourceFactory[R]): Status = {
     resourceFactory.using { resource =>
 
       val status = runSuites(testName, args, resource)
@@ -35,7 +35,7 @@ abstract class AroundSuites[R](resourceData: Either[ResourceFactory[R], R]) exte
     }
   }
 
-  def runSuites(testName: Option[String], args: Args, resource: R): Status = {
+  private def runSuites(testName: Option[String], args: Args, resource: R): Status = {
     new Suites(
       suites(resource): _*
     ).run(testName, args)

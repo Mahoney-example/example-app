@@ -8,7 +8,11 @@ import uk.org.lidalia.exampleapp.tests.support.{FunctionalTestEnvironment, Funct
 
 import scala.collection.immutable.Seq
 
-class WebsiteTestSuites(factoryData: Either[FunctionalTestEnvironmentFactory, FunctionalTestEnvironment]) extends AroundSuites(factoryData) {
+class WebsiteTestSuites(
+  factoryData: Either[FunctionalTestEnvironmentFactory, FunctionalTestEnvironment]
+) extends AroundSuites(
+  factoryData
+) {
 
   override def suites(factories: FunctionalTestEnvironment): Seq[Suite] = List(
 
@@ -17,7 +21,6 @@ class WebsiteTestSuites(factoryData: Either[FunctionalTestEnvironmentFactory, Fu
 
   )
 
-  def this(testEnvFactory: FunctionalTestEnvironmentFactory) = this(Left(testEnvFactory))
   def this(testEnv: FunctionalTestEnvironment) = this(Right(testEnv))
-  def this() = this(FunctionalTestEnvironmentFactory())
+  def this() = this(Left(FunctionalTestEnvironmentFactory()))
 }

@@ -3,6 +3,7 @@ package exampleapp
 package tests.website
 
 import tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
+import tests.dsl.User
 import pages.{LoggedInPage, LoginPage}
 import local.{Environment, EnvironmentDefinition}
 import support.BrowserFunctionalTests
@@ -19,10 +20,10 @@ class LoginTests(
   test("can login via the browser") { case (env, browser) =>
 
     // given
-    user("Joe").exists()
+    User("Joe").exists()
+    val loginPage = browser.to(LoginPage)
 
     // when
-    val loginPage = browser.to(LoginPage)
     loginPage.loginButton.click()
 
     // then
@@ -34,9 +35,4 @@ class LoginTests(
 
   def this() = this(EnvironmentDefinition(), WebDriverDefinition())
 
-  def user(username: String): User = new User(username)
-
-  case class User(name: String) {
-    def exists() = Unit
-  }
 }

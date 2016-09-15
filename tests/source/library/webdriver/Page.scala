@@ -3,6 +3,7 @@ package exampleapp
 package tests
 package library.webdriver
 
+import org.openqa.selenium.{By, WebElement}
 import uk.org.lidalia.net.UriReference
 
 trait PageFactory[P <: Page[P]] {
@@ -18,5 +19,13 @@ trait Page[P <: Page[P]] {
   def title = driver.getTitle
 
   def isCurrentPage: Boolean
+
+  def $(selector: String): WebElement = {
+    driver.findElement(By.cssSelector(selector))
+  }
+
+  override def toString = {
+    s"${getClass.getSimpleName}[${driver.getCurrentUrl}]"
+  }
 
 }

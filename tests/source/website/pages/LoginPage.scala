@@ -3,7 +3,6 @@ package exampleapp.tests
 package website.pages
 
 import library.webdriver.{Page, PageFactory, ReusableWebDriver}
-import org.openqa.selenium.By
 import uk.org.lidalia.net.Path
 
 object LoginPage extends PageFactory[LoginPage] {
@@ -15,7 +14,7 @@ object LoginPage extends PageFactory[LoginPage] {
 
 class LoginPage(val driver: ReusableWebDriver) extends Page[LoginPage] {
 
-  val loginButton = driver.findElement(By.cssSelector("button.login"))
+  lazy val loginButton = $("button.login")
 
   override def isCurrentPage: Boolean = {
     title == "Login Page"

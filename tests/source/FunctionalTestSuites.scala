@@ -13,8 +13,10 @@ class FunctionalTestSuites(
 ) {
 
   override def suites(factories: FunctionalTestEnvironment) = List(
+
     new ApiTestSuites(factories),
     new WebsiteTestSuites(factories)
+
   )
 
   def this(testEnv: FunctionalTestEnvironment) = this(Right(testEnv))

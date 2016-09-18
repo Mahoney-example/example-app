@@ -19,12 +19,14 @@ object ServerDefinition {
 
 class ServerDefinition private (
   config: ServerConfig,
-  val application: Application
+  application: Application
 ) extends ResourceFactory[Server] {
 
   override def using[T](work: (Server) => T): T = {
 
-    JettyServerDefinition(toHttp(application), config.localPort).using { jettyServer =>
+    val domainWithHttpPorts = toHttp(application)
+
+    JettyServerDefinition(domainWithHttpPorts, config.localPort).using { jettyServer =>
       work(Server(application, jettyServer))
     }
   }

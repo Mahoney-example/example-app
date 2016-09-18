@@ -4,6 +4,7 @@ package exampleapp.server
 import uk.org.lidalia.exampleapp.server.application.ApplicationDefinition
 import uk.org.lidalia.exampleapp.server.web.{Server, ServerConfig, ServerDefinition}
 import uk.org.lidalia.exampleapp.system.blockUntilShutdown
+import uk.org.lidalia.exampleapp.system.logging.LogbackLoggerFactory
 import uk.org.lidalia.scalalang.ResourceFactory
 
 object ProcessDefinition {
@@ -13,6 +14,19 @@ object ProcessDefinition {
     serverConfig: ServerConfig
   ): ProcessDefinition = {
     new ProcessDefinition(applicationDefinition, serverConfig)
+  }
+
+  def apply(
+    loggerFactory: LogbackLoggerFactory,
+    config: ServerConfig
+  ): ProcessDefinition = {
+    ProcessDefinition(
+      ApplicationDefinition(
+        config.applicationConfig,
+        loggerFactory
+      ),
+      config
+    )
   }
 }
 

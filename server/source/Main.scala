@@ -1,8 +1,9 @@
 package uk.org.lidalia
 package exampleapp.server
 
+import java.lang.System.{getProperties, getenv}
+
 import ch.qos.logback.classic.Level
-import uk.org.lidalia.exampleapp.server.application.ApplicationDefinition
 import uk.org.lidalia.exampleapp.system.logging.LogbackLoggingDefinition
 
 import collection.JavaConversions.mapAsScalaMap
@@ -16,22 +17,14 @@ object Main {
       "uk.org.lidalia.exampleapp" -> Level.INFO
     ).using { loggerFactory =>
 
-      try {
+      val config = Configuration(
+        args.toVector,
+        getProperties.toMap,
+        getenv().toMap
+      )
 
-        val config = Configuration(
-          args.toVector,
-          System.getProperties.toMap,
-          System.getenv().toMap
-        )
+      ProcessDefinition(loggerFactory, config).runUntilShutdown()
 
-        val app = ApplicationDefinition(config.applicationConfig, loggerFactory)
-
-        ProcessDefinition(app, config)
-          .runUntilShutdown()
-
-      } catch {
-        case e: Throwable => loggerFactory.getLogger(getClass).error("Unexpected exception running server", e)
-      }
     }
   }
 }

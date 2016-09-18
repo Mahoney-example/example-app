@@ -7,7 +7,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.jul.LevelChangePropagator
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.{Level, LoggerContext}
-import ch.qos.logback.core.{UnsynchronizedAppenderBase, AsyncAppenderBase, ConsoleAppender}
+import ch.qos.logback.core.{AsyncAppenderBase, ConsoleAppender, UnsynchronizedAppenderBase}
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
 import org.slf4j.Logger
 import scalalang.ResourceFactory
@@ -82,7 +82,14 @@ class LogbackLoggingDefinition private (
     logFactory.start()
 
     _try {
-      work(new LogbackLoggerFactory(logFactory))
+      val loggerFactory = new LogbackLoggerFactory(logFactory)
+      try {
+        work(loggerFactory)
+      } catch { case e: Throwable =>
+        val logger = loggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)
+        logger.error("Unexpected exception", e)
+        throw e
+      }
     } _finally  {
       logFactory.stop()
     }

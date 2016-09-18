@@ -4,7 +4,6 @@ package server.application
 
 import org.slf4j.Logger
 import scalalang.ResourceFactory
-import scalalang.TryFinally._try
 import server.services.Services
 import server.services.email.HttpEmailService
 import server.services.profiles.DbUserProfileService
@@ -15,40 +14,26 @@ import system.logging.{StaticLoggerFactory, LoggerFactory}
 object ApplicationDefinition {
   def apply(
     config: ApplicationConfig,
-    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory,
-    services: ?[Services] = None
+    loggerFactory: LoggerFactory[Logger] = StaticLoggerFactory
   ) = {
-    new ApplicationDefinition(config, loggerFactory, services)
+    new ApplicationDefinition(config, loggerFactory)
   }
 }
 
 class ApplicationDefinition private (
   config: ApplicationConfig,
-  loggerFactory: LoggerFactory[Logger],
-  services: ?[Services]
+  loggerFactory: LoggerFactory[Logger]
 ) extends ResourceFactory[Application] with HasLogger {
 
   override def using[T](work: (Application) => T): T = {
 
-    def run(servs: Services): T = {
-      val application = Application(config, loggerFactory, servs)
-      _try {
-        log.info(s"Application started: $application")
-        work(application)
-      } _finally {
-        log.info(s"Application stopped: $application")
-      }
-    }
-
-    services match {
-      case None =>
-        PooledDatabaseDefinition(config.jdbcConfig).using { database =>
-          run(Services(
-            HttpEmailService(config.sendGridUrl, config.sendGridToken),
-            DbUserProfileService(database)
-          ))
-        }
-      case Some(servs) => run(servs)
+    PooledDatabaseDefinition(config.jdbcConfig).using { database =>
+      val services = Services(
+        HttpEmailService(config.sendGridUrl, config.sendGridToken),
+        DbUserProfileService(database)
+      )
+      val application = Application(config, loggerFactory, services)
+      work(application)
     }
   }
 }

@@ -1,11 +1,12 @@
 package uk.org.lidalia
-package exampleapp.tests.website
+package exampleapp
+package tests.website
 
-import org.slf4j.LoggerFactory
-import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
-import uk.org.lidalia.exampleapp.tests.website.support.BrowserFunctionalTests
-import uk.org.lidalia.scalalang.ResourceFactory
+import local.{Environment, EnvironmentDefinition}
+import tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
+import support.BrowserFunctionalTests
+import scalalang.ResourceFactory
+import pages.{LoggedInPage, RegistrationPage}
 
 class RegisterTests(
   envFactory: ResourceFactory[Environment],
@@ -15,13 +16,23 @@ class RegisterTests(
   webDriverFactory
 ) {
 
-  test("register") { environment =>
-    LoggerFactory.getLogger(classOf[RegisterTests]).info("Test in progress")
-  }
+  test("can register a new user") { case (env, browser) =>
 
-  test("register2") { environment =>
-    LoggerFactory.getLogger(classOf[RegisterTests]).info("Test in progress")
+    // given
+    val registrationPage = browser.to(RegistrationPage)
+
+    // when
+    registrationPage.registerButton.click()
+
+    // then
+    val loggedInPage = browser.at(LoggedInPage)
+
+    assert(
+      loggedInPage.welcomeMessage.contains("Joe")
+    )
+
   }
 
   def this() = this(EnvironmentDefinition(), WebDriverDefinition())
+
 }

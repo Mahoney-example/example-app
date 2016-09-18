@@ -2,9 +2,10 @@ package uk.org.lidalia
 package exampleapp.server
 
 import exampleapp.server.adapters.http.HttpRoutesConfig
-import exampleapp.server.domain.DomainConfig
 import exampleapp.system.db.JdbcConfig
 import net.{Port, Uri, Url}
+import uk.org.lidalia.exampleapp.server.adapters.outbound.OutboundAdaptersConfig
+import uk.org.lidalia.exampleapp.server.domain.DomainConfig
 
 import scala.collection.immutable
 
@@ -14,9 +15,12 @@ object Configuration {
     args: immutable.Seq[String],
     sysProps: Map[String, String],
     env: Map[String, String]
-  ): HttpRoutesConfig = {
-    HttpRoutesConfig (
-      DomainConfig(
+  ): Configuration = {
+    new Configuration(
+      HttpRoutesConfig(
+        Port(8080)
+      ),
+      OutboundAdaptersConfig(
         sendGridUrl = Url("http://www.example.com"),
         sendGridToken = "",
         jdbcConfig = JdbcConfig(
@@ -26,7 +30,9 @@ object Configuration {
           "SELECT 1"
         )
       ),
-      localPort = Port(8080)
+      DomainConfig()
     )
   }
 }
+
+case class Configuration(httpRoutesConfig: HttpRoutesConfig, adaptersConfig: OutboundAdaptersConfig, domainConfig: DomainConfig) {}

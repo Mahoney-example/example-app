@@ -1,45 +1,55 @@
 package uk.org.lidalia
 package exampleapp.server
 
-import exampleapp.server.adapters.http.{HttpRoutes, HttpRoutesConfig, HttpRoutesDefinition}
-import exampleapp.server.domain.DomainDefinition
+import exampleapp.server.adapters.http.{HttpRoutes, HttpRoutesDefinition}
+import exampleapp.server.adapters.outbound.OutboundAdaptersDefinition
 import exampleapp.system.blockUntilShutdown
-import exampleapp.system.logging.LogbackLoggerFactory
+import exampleapp.system.logging.LoggerFactory
+import org.slf4j.Logger
 import scalalang.ResourceFactory
+import uk.org.lidalia.exampleapp.server.domain.Domain
 
 object ServerDefinition {
 
   def apply(
-             domainDefinition: DomainDefinition,
-             portsConfig: HttpRoutesConfig
+    loggerFactory: LoggerFactory[Logger],
+    config: Configuration
   ): ServerDefinition = {
-    new ServerDefinition(domainDefinition, portsConfig)
-  }
 
-  def apply(
-    loggerFactory: LogbackLoggerFactory,
-    config: HttpRoutesConfig
-  ): ServerDefinition = {
-    ServerDefinition(
-      DomainDefinition(
-        config.domainConfig,
-        loggerFactory
-      ),
-      config
+    val adapters = new OutboundAdaptersDefinition(
+      config.adaptersConfig
+    )
+
+    new ServerDefinition(
+      adapters,
+      config,
+      loggerFactory
     )
   }
 }
 
-class ServerDefinition private(domainDefinition: DomainDefinition, portsConfig: HttpRoutesConfig) extends ResourceFactory[HttpRoutes] {
+class ServerDefinition private(
+
+  adaptersDefinition: OutboundAdaptersDefinition,
+  config: Configuration,
+  loggerFactory: LoggerFactory[Logger]
+
+) extends ResourceFactory[HttpRoutes] {
 
   def runUntilShutdown(): Unit = {
     using(blockUntilShutdown)
   }
 
   override def using[T](work: (HttpRoutes) => T): T = {
-    domainDefinition.using { domain =>
-      HttpRoutesDefinition(portsConfig, domain).using { ports =>
-        work(ports)
+
+    adaptersDefinition.using { adapters =>
+
+      val domain = Domain(config.domainConfig, loggerFactory, adapters)
+
+      val httpRoutesDefinition = HttpRoutesDefinition(config.httpRoutesConfig, domain)
+
+      httpRoutesDefinition.using { httpRoutes =>
+        work(httpRoutes)
       }
     }
   }

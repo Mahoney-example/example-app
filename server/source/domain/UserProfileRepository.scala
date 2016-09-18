@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.server.domain
 
-trait UserProfileService {
+trait UserProfileRepository {
 
   def get(userId: UserId): ?[User]
   def create(user: User): Unit

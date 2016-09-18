@@ -2,7 +2,7 @@ package uk.org.lidalia
 package exampleapp.local
 
 import org.slf4j.Logger
-import exampleapp.server.domain.{DomainConfig, DomainDefinition}
+import exampleapp.server.domain.DomainConfig
 import exampleapp.server.adapters.outbound.profiles.userProfileTableCreation
 import exampleapp.system.db.changelog.Migrator.changeLog
 import exampleapp.system.db.hsqldb.{HsqlDatabase, HsqlDatabaseDefinition}
@@ -11,9 +11,10 @@ import net.Port
 import scalalang.ResourceFactory
 import ResourceFactory.usingAll
 import exampleapp.system.logging.{LoggerFactory, StaticLoggerFactory}
-import exampleapp.server.ServerDefinition
+import exampleapp.server.{Configuration, ServerDefinition}
 import exampleapp.server.adapters.http.HttpRoutesConfig
 import stubhttp.StubHttpServerFactory
+import uk.org.lidalia.exampleapp.server.adapters.outbound.OutboundAdaptersConfig
 
 object EnvironmentDefinition {
 
@@ -52,14 +53,19 @@ class EnvironmentDefinition private (
 
       database.update()
 
-      val appConfig = DomainConfig(
+      val adaptersConfig = OutboundAdaptersConfig(
         sendGridUrl = stub1.localAddress,
         sendGridToken = "secret_token",
         jdbcConfig = database.jdbcConfig
       )
 
       val serverDefinitions = ports.map { port =>
-        ServerDefinition(DomainDefinition(appConfig, loggerFactory), HttpRoutesConfig(appConfig, port))
+        val config = Configuration(
+          HttpRoutesConfig(port),
+          adaptersConfig,
+          DomainConfig()
+        )
+        ServerDefinition(loggerFactory, config)
       }
 
       usingAll(serverDefinitions:_*) { servers =>

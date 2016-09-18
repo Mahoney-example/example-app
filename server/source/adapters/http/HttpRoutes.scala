@@ -7,12 +7,12 @@ import exampleapp.system.http.server.JettyServer
 import scalalang.Reusable
 
 case class HttpRoutes private[http](
-  application: Domain,
+  domain: Domain,
   jettyServer: JettyServer
 ) extends Reusable with HasLogger {
 
   def localPort = jettyServer.localPort
 
-  override def reset(): Unit = application.reset()
+  override def reset(): Unit = domain.reset()
 
 }

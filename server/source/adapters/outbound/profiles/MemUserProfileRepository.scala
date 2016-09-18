@@ -2,17 +2,17 @@ package uk.org.lidalia
 package exampleapp.server.adapters.outbound.profiles
 
 import scalalang.Lock
-import uk.org.lidalia.exampleapp.server.domain.{User, UserId, UserProfileService}
+import uk.org.lidalia.exampleapp.server.domain.{User, UserId, UserProfileRepository}
 
 import collection.mutable
 
-object MemUserProfileService {
+object MemUserProfileRepository {
 
-  def apply() = new MemUserProfileService()
+  def apply() = new MemUserProfileRepository()
 
 }
 
-class MemUserProfileService private () extends UserProfileService {
+class MemUserProfileRepository private() extends UserProfileRepository {
 
   private val lock = new Lock()
   private val profiles: mutable.Map[UserId, User] = mutable.Map()

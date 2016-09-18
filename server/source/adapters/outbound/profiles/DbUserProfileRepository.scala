@@ -2,16 +2,16 @@ package uk.org.lidalia
 package exampleapp.server.adapters.outbound.profiles
 
 import exampleapp.system.db.Database
-import exampleapp.server.domain.{User, UserId, UserProfileService}
+import exampleapp.server.domain.{User, UserId, UserProfileRepository}
 
-object DbUserProfileService {
+object DbUserProfileRepository {
 
-  def apply(database: Database) = new DbUserProfileService(database)
+  def apply(database: Database) = new DbUserProfileRepository(database)
 }
 
-class DbUserProfileService private (
+class DbUserProfileRepository private(
   database: Database
-) extends UserProfileService {
+) extends UserProfileRepository {
 
   override def get(userId: UserId): ?[User] = ???
 

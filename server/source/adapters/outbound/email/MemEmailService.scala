@@ -1,11 +1,11 @@
-package uk.org.lidalia.exampleapp.server.services.email
+package uk.org.lidalia
+package exampleapp.server.adapters.outbound.email
 
-import uk.org.lidalia.scalalang.Lock
+import exampleapp.server.domain.{Email, EmailResult, EmailService, Success}
+import scalalang.Lock
 
-import collection.mutable
-import collection.immutable
-
-import concurrent.Future
+import scala.collection.{immutable, mutable}
+import scala.concurrent.Future
 
 object MemEmailService {
 

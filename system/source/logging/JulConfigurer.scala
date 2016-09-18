@@ -1,6 +1,5 @@
 package uk.org.lidalia
-package exampleapp.system
-package logging
+package exampleapp.system.logging
 
 import java.util.logging.Level.ALL
 import java.util.logging.LogManager

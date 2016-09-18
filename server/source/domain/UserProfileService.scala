@@ -1,5 +1,5 @@
 package uk.org.lidalia
-package exampleapp.server.services.profiles
+package exampleapp.server.domain
 
 trait UserProfileService {
 

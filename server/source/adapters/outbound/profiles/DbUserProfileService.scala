@@ -1,8 +1,8 @@
 package uk.org.lidalia
-package exampleapp
-package server.services.profiles
+package exampleapp.server.adapters.outbound.profiles
 
-import system.db.Database
+import exampleapp.system.db.Database
+import exampleapp.server.domain.{User, UserId, UserProfileService}
 
 object DbUserProfileService {
 

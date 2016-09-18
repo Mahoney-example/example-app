@@ -23,7 +23,7 @@ object Main {
         getenv().toMap
       )
 
-      ProcessDefinition(loggerFactory, config).runUntilShutdown()
+      ServerDefinition(loggerFactory, config).runUntilShutdown()
 
     }
   }

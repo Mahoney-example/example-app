@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.system.http.server
 
-import uk.org.lidalia.http.core.{Http, Request, Response}
+import uk.org.lidalia.http.core.{Http, Request}
 
 import scala.language.higherKinds
 

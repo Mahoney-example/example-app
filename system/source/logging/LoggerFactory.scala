@@ -1,6 +1,5 @@
 package uk.org.lidalia
-package exampleapp.system
-package logging
+package exampleapp.system.logging
 
 import org.slf4j.{Logger, ILoggerFactory}
 import scalalang.{ResourceFactory, Reusable}

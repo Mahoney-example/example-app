@@ -1,8 +1,10 @@
-package uk.org.lidalia.exampleapp.server.services.email
+package uk.org.lidalia
+package exampleapp.server.adapters.outbound.email
 
-import uk.org.lidalia.net.Url
+import exampleapp.server.domain.{Email, EmailResult, EmailService}
+import net.Url
 
-import concurrent.Future
+import scala.concurrent.Future
 
 object HttpEmailService {
 

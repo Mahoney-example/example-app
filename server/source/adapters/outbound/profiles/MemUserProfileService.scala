@@ -1,7 +1,8 @@
 package uk.org.lidalia
-package exampleapp.server.services.profiles
+package exampleapp.server.adapters.outbound.profiles
 
 import scalalang.Lock
+import uk.org.lidalia.exampleapp.server.domain.{User, UserId, UserProfileService}
 
 import collection.mutable
 

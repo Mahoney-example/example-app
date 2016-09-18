@@ -1,20 +1,19 @@
 package uk.org.lidalia
-package exampleapp
-package local
+package exampleapp.local
 
 import org.slf4j.Logger
-import server.application.{ApplicationConfig, ApplicationDefinition}
-import server.services.profiles.userProfileTableCreation
-import server.web.ServerConfig
-import system.db.changelog.Migrator.changeLog
-import system.db.hsqldb.{HsqlDatabase, HsqlDatabaseDefinition}
-import system.blockUntilShutdown
+import exampleapp.server.domain.{DomainConfig, DomainDefinition}
+import exampleapp.server.adapters.outbound.profiles.userProfileTableCreation
+import exampleapp.system.db.changelog.Migrator.changeLog
+import exampleapp.system.db.hsqldb.{HsqlDatabase, HsqlDatabaseDefinition}
+import exampleapp.system.blockUntilShutdown
 import net.Port
 import scalalang.ResourceFactory
 import ResourceFactory.usingAll
-import system.logging.{LoggerFactory, StaticLoggerFactory}
-import uk.org.lidalia.exampleapp.server.ProcessDefinition
-import uk.org.lidalia.stubhttp.StubHttpServerFactory
+import exampleapp.system.logging.{LoggerFactory, StaticLoggerFactory}
+import exampleapp.server.ServerDefinition
+import exampleapp.server.adapters.http.HttpRoutesConfig
+import stubhttp.StubHttpServerFactory
 
 object EnvironmentDefinition {
 
@@ -53,14 +52,14 @@ class EnvironmentDefinition private (
 
       database.update()
 
-      val appConfig = ApplicationConfig(
+      val appConfig = DomainConfig(
         sendGridUrl = stub1.localAddress,
         sendGridToken = "secret_token",
         jdbcConfig = database.jdbcConfig
       )
 
       val serverDefinitions = ports.map { port =>
-        ProcessDefinition(ApplicationDefinition(appConfig, loggerFactory), ServerConfig(appConfig, port))
+        ServerDefinition(DomainDefinition(appConfig, loggerFactory), HttpRoutesConfig(appConfig, port))
       }
 
       usingAll(serverDefinitions:_*) { servers =>

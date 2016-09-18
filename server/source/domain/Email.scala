@@ -1,4 +1,5 @@
-package uk.org.lidalia.exampleapp.server.services.email
+package uk.org.lidalia
+package exampleapp.server.domain
 
 case class Email(
   to: Set[EmailAddress],

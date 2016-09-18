@@ -1,9 +1,9 @@
 package uk.org.lidalia
-package exampleapp.server.services
+package exampleapp.server.adapters.outbound
 
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator.changeSet
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator.createTable
-import uk.org.lidalia.exampleapp.system.db.changelog.Migrator.column
+import exampleapp.system.db.changelog.Migrator.changeSet
+import exampleapp.system.db.changelog.Migrator.createTable
+import exampleapp.system.db.changelog.Migrator.column
 
 package object profiles {
 

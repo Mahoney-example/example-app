@@ -1,4 +1,5 @@
-package uk.org.lidalia.exampleapp.server.services.profiles
+package uk.org.lidalia
+package exampleapp.server.domain
 
 import java.util.UUID
 

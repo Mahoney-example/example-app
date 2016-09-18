@@ -1,6 +1,5 @@
 package uk.org.lidalia
-package exampleapp.system
-package logging
+package exampleapp.system.logging
 
 import ch.qos.logback.classic.Level.WARN
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
@@ -11,8 +10,8 @@ import ch.qos.logback.core.{AsyncAppenderBase, ConsoleAppender, UnsynchronizedAp
 import ch.qos.logback.core.spi.{ContextAware, LifeCycle}
 import org.slf4j.Logger
 import scalalang.ResourceFactory
-import uk.org.lidalia.exampleapp.system.logging.StaticLoggerFactory.factory
-import uk.org.lidalia.scalalang.TryFinally._try
+import StaticLoggerFactory.factory
+import scalalang.TryFinally._try
 
 object LogbackLoggingDefinition {
 

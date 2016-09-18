@@ -1,10 +1,10 @@
 package uk.org.lidalia
 package exampleapp.server
 
-import uk.org.lidalia.exampleapp.server.application.ApplicationConfig
-import uk.org.lidalia.exampleapp.server.web.ServerConfig
-import uk.org.lidalia.exampleapp.system.db.JdbcConfig
-import uk.org.lidalia.net.{Port, Uri, Url}
+import exampleapp.server.adapters.http.HttpRoutesConfig
+import exampleapp.server.domain.DomainConfig
+import exampleapp.system.db.JdbcConfig
+import net.{Port, Uri, Url}
 
 import scala.collection.immutable
 
@@ -14,9 +14,9 @@ object Configuration {
     args: immutable.Seq[String],
     sysProps: Map[String, String],
     env: Map[String, String]
-  ): ServerConfig = {
-    ServerConfig (
-      ApplicationConfig(
+  ): HttpRoutesConfig = {
+    HttpRoutesConfig (
+      DomainConfig(
         sendGridUrl = Url("http://www.example.com"),
         sendGridToken = "",
         jdbcConfig = JdbcConfig(

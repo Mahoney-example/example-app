@@ -6,7 +6,7 @@ import java.time.Instant
 
 import ch.qos.logback.classic.Level
 import org.slf4j.Logger.ROOT_LOGGER_NAME
-import server.services.profiles.userProfileTableCreation
+import uk.org.lidalia.exampleapp.server.adapters.outbound.profiles.userProfileTableCreation
 import system.db.changelog.FastLiquibase
 import system.db.changelog.Migrator.changeLog
 import system.db.hsqldb.HsqlDatabaseDefinition

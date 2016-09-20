@@ -12,7 +12,7 @@ import scalalang.ResourceFactory
 import ResourceFactory.usingAll
 import exampleapp.system.logging.{LoggerFactory, StaticLoggerFactory}
 import exampleapp.server.{Configuration, ServerDefinition}
-import exampleapp.server.adapters.http.HttpRoutesConfig
+import exampleapp.server.adapters.inbound.http.HttpRoutesConfig
 import stubhttp.StubHttpServerFactory
 import uk.org.lidalia.exampleapp.server.adapters.outbound.OutboundAdaptersConfig
 

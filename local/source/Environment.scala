@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.local
 
-import exampleapp.server.adapters.http.HttpRoutes
+import exampleapp.server.adapters.inbound.http.HttpRoutes
 import exampleapp.system.db.hsqldb.HsqlDatabase
 import scalalang.Reusable
 import stubhttp.StubHttpServer

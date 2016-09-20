@@ -1,5 +1,5 @@
 package uk.org.lidalia
-package exampleapp.server.adapters.http
+package exampleapp.server.adapters.inbound.http
 
 import exampleapp.server.domain.Domain
 import exampleapp.system.http.server.JettyServerDefinition

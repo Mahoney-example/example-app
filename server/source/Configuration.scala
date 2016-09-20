@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.server
 
-import exampleapp.server.adapters.http.HttpRoutesConfig
+import exampleapp.server.adapters.inbound.http.HttpRoutesConfig
 import exampleapp.system.db.JdbcConfig
 import net.{Port, Uri, Url}
 import uk.org.lidalia.exampleapp.server.adapters.outbound.OutboundAdaptersConfig
@@ -35,4 +35,12 @@ object Configuration {
   }
 }
 
-case class Configuration(httpRoutesConfig: HttpRoutesConfig, adaptersConfig: OutboundAdaptersConfig, domainConfig: DomainConfig) {}
+case class Configuration(
+
+  httpRoutesConfig: HttpRoutesConfig,
+
+  adaptersConfig: OutboundAdaptersConfig,
+
+  domainConfig: DomainConfig
+
+)

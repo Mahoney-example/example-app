@@ -1,7 +1,7 @@
 package uk.org.lidalia
 package exampleapp.server
 
-import exampleapp.server.adapters.http.{HttpRoutes, HttpRoutesDefinition}
+import exampleapp.server.adapters.inbound.http.{HttpRoutes, HttpRoutesDefinition}
 import exampleapp.server.adapters.outbound.OutboundAdaptersDefinition
 import exampleapp.system.blockUntilShutdown
 import exampleapp.system.logging.LoggerFactory

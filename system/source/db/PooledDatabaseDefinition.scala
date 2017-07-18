@@ -2,6 +2,8 @@ package uk.org.lidalia
 package exampleapp
 package system.db
 
+import java.sql.Connection
+
 import com.zaxxer.hikari.HikariDataSource
 import scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.TryFinally._try
@@ -14,9 +16,9 @@ object PooledDatabaseDefinition {
 
 class PooledDatabaseDefinition private (
   jdbcConfig: JdbcConfig
-) extends ResourceFactory[Database] {
+) extends ResourceFactory[ResourceFactory[Connection]] {
 
-  override def using[T](work: (Database) => T): T = {
+  override def using[T](work: (ResourceFactory[Connection]) => T): T = {
 
     val ds = new HikariDataSource()
     ds.setJdbcUrl(jdbcConfig.jdbcUrl.toString)

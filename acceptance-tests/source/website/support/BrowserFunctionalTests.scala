@@ -1,12 +1,10 @@
-package uk.org.lidalia
-package exampleapp
-package tests.website.support
+package uk.org.lidalia.exampleapp.acceptancetests.website.support
 
 import org.scalatest.{Outcome, fixture}
 import uk.org.lidalia.exampleapp.local.Environment
-import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverWithBaseUrl}
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.ResourceFactory.usingAll
+import uk.org.lidalia.webdriver.{ReusableWebDriver, WebDriverWithBaseUrl}
 
 abstract class BrowserFunctionalTests(
   envFactory: ResourceFactory[Environment],

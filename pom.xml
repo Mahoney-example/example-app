@@ -22,7 +22,7 @@
     <hsqldb.version>2.3.3</hsqldb.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <scala.version>2.11.7</scala.version>
+    <scala.version>2.12.2</scala.version>
   </properties>
 
   <modules>
@@ -30,7 +30,7 @@
     <module>server</module>
     <module>local</module>
     <module>client</module>
-    <module>tests</module>
+    <module>acceptance-tests</module>
   </modules>
 
   <build>

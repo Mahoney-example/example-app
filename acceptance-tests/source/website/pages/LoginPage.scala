@@ -1,9 +1,7 @@
-package uk.org.lidalia
-package exampleapp.tests
-package website.pages
+package uk.org.lidalia.exampleapp.acceptancetests.website.pages
 
-import library.webdriver.{Page, PageFactory, ReusableWebDriver}
 import uk.org.lidalia.net.Path
+import uk.org.lidalia.webdriver.{Page, PageFactory, ReusableWebDriver}
 
 object LoginPage extends PageFactory[LoginPage] {
 

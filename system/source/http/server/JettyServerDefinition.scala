@@ -15,8 +15,7 @@ import uk.org.lidalia.exampleapp.system.HasLogger
 import uk.org.lidalia.scalalang.ResourceFactory
 import uk.org.lidalia.scalalang.TryFinally._try
 
-import scala.collection.JavaConversions.enumerationAsScalaIterator
-import scala.collection.JavaConversions.iterableAsScalaIterable
+import scala.collection.JavaConverters._
 
 object JettyServerDefinition {
   def apply(http: Http[Response], port: ?[Port] = None) = new JettyServerDefinition(http, port)
@@ -45,7 +44,7 @@ class JettyServerDefinition private (
         val request = Request(
           Method(baseRequest.getMethod),
           RequestUri(baseRequest.getUri.toString),
-          baseRequest.getHttpFields.map { field => HeaderField(field.getName, field.getValue) }.toList,
+          baseRequest.getHttpFields.asScala.map { field => HeaderField(field.getName, field.getValue) }.toList,
           EmptyEntity
         )
         val response = http.execute(request)

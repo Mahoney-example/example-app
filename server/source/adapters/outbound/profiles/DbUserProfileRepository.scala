@@ -1,16 +1,18 @@
 package uk.org.lidalia
 package exampleapp.server.adapters.outbound.profiles
 
-import exampleapp.system.db.Database
+import java.sql.Connection
+
 import exampleapp.server.domain.{User, UserId, UserProfileRepository}
+import uk.org.lidalia.scalalang.ResourceFactory
 
 object DbUserProfileRepository {
 
-  def apply(database: Database) = new DbUserProfileRepository(database)
+  def apply(database: ResourceFactory[Connection]) = new DbUserProfileRepository(database)
 }
 
 class DbUserProfileRepository private(
-  database: Database
+  database: ResourceFactory[Connection]
 ) extends UserProfileRepository {
 
   override def get(userId: UserId): ?[User] = ???

@@ -10,7 +10,9 @@ import uk.org.lidalia.scalalang.ByteSeq
 
 class JettyServerTests extends FunSuite with MockitoSugar {
 
-  ignore("round trip") { case (client, mockServer) =>
+  ignore("round trip") { args =>
+
+    val (client, mockServer) = args
 
     val request = Request(Method.GET, RequestUri("/path"), List())
     val response = Response(Code.OK, List(), new ByteEntity(ByteSeq()))

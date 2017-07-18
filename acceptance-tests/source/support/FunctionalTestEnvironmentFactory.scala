@@ -1,14 +1,11 @@
-package uk.org.lidalia
-package exampleapp
-package tests
-package support
+package uk.org.lidalia.exampleapp.acceptancetests.support
 
 import ch.qos.logback.classic.Level
 import org.slf4j.Logger
 import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
-import uk.org.lidalia.exampleapp.system.logging.{LogbackLoggerFactory, LogbackLoggingDefinition, LoggerFactory, StaticLoggerFactory}
-import uk.org.lidalia.exampleapp.tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
-import uk.org.lidalia.scalalang.{Pool, PoolFactory, ResourceFactory}
+import uk.org.lidalia.exampleapp.system.logging.{LogbackLoggingDefinition, LoggerFactory, StaticLoggerFactory}
+import uk.org.lidalia.scalalang.{PoolFactory, ResourceFactory}
+import uk.org.lidalia.webdriver.{ReusableWebDriver, WebDriverDefinition}
 
 object FunctionalTestEnvironmentFactory {
   def apply(): FunctionalTestEnvironmentFactory = new FunctionalTestEnvironmentFactory()

@@ -2,18 +2,20 @@ package uk.org.lidalia
 package exampleapp
 package system.db
 
-import java.sql.Connection
+import java.sql.{Array, Blob, CallableStatement, Clob, Connection, DatabaseMetaData, NClob, PreparedStatement, SQLWarning, SQLXML, Savepoint, Statement, Struct}
+import java.util
+import java.util.Properties
+import java.util.concurrent.Executor
 import javax.sql.DataSource
 
-import liquibase.changelog.DatabaseChangeLog
-import uk.org.lidalia.scalalang.ResourceFactory
+import uk.org.lidalia.scalalang.Reusable.{State, OK, BROKEN}
+import uk.org.lidalia.scalalang.{ResourceFactory, Reusable}
 import uk.org.lidalia.scalalang.TryFinally._try
 
 object Database {
 
   def apply(
-    config: JdbcConfig,
-    changelog: DatabaseChangeLog
+    config: JdbcConfig
   ): Database = {
     apply(
       DriverManagerDataSource(config)
@@ -28,11 +30,11 @@ object Database {
 
 class Database protected (
   dataSource: DataSource
-) extends ResourceFactory[Connection] {
+) extends ResourceFactory[ReusableConnection] {
 
-  override def using[T](work: (Connection) => T): T = {
+  override def using[T](work: (ReusableConnection) => T): T = {
 
-    val connection = dataSource.getConnection
+    val connection = new ReusableConnection(dataSource.getConnection)
 
     _try {
       work(connection)
@@ -41,3 +43,5 @@ class Database protected (
     }
   }
 }
+
+

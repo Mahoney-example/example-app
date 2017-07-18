@@ -63,15 +63,26 @@
     </dependency>
     <dependency>
       <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_2.11</artifactId>
-      <version>1.12.5</version>
+      <artifactId>scalacheck_2.12</artifactId>
+      <version>1.13.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.11</artifactId>
-      <version>2.2.5</version>
+      <artifactId>scalatest_2.12</artifactId>
+      <version>3.0.3</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.lidalia</groupId>
+      <artifactId>lidalia-scalatest</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.lidalia</groupId>
+      <artifactId>lidalia-webdriver</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.org.lidalia</groupId>
@@ -122,7 +133,7 @@
         <groupId>org.scalatest</groupId>
         <artifactId>scalatest-maven-plugin</artifactId>
         <configuration>
-          <suites>uk.org.lidalia.exampleapp.tests.FunctionalTestSuites</suites>
+          <suites>uk.org.lidalia.exampleapp.acceptancetests.FunctionalTestSuites</suites>
         </configuration>
       </plugin>
       <plugin>

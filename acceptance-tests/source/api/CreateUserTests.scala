@@ -1,6 +1,4 @@
-package uk.org.lidalia
-package exampleapp
-package tests.api
+package uk.org.lidalia.exampleapp.acceptancetests.api
 
 import org.scalatest.Outcome
 import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}

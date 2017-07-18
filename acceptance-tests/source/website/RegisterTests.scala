@@ -1,12 +1,10 @@
-package uk.org.lidalia
-package exampleapp
-package tests.website
+package uk.org.lidalia.exampleapp.acceptancetests.website
 
-import local.{Environment, EnvironmentDefinition}
-import tests.library.webdriver.{ReusableWebDriver, WebDriverDefinition}
-import support.BrowserFunctionalTests
-import scalalang.ResourceFactory
-import pages.{LoggedInPage, RegistrationPage}
+import uk.org.lidalia.exampleapp.local.{Environment, EnvironmentDefinition}
+import uk.org.lidalia.webdriver.{ReusableWebDriver, WebDriverDefinition}
+import uk.org.lidalia.exampleapp.acceptancetests.website.support.BrowserFunctionalTests
+import uk.org.lidalia.scalalang.ResourceFactory
+import uk.org.lidalia.exampleapp.acceptancetests.website.pages.{LoggedInPage, RegistrationPage}
 
 class RegisterTests(
   envFactory: ResourceFactory[Environment],
@@ -16,7 +14,8 @@ class RegisterTests(
   webDriverFactory
 ) {
 
-  test("can register a new user") { case (env, browser) =>
+  test("can register a new user") { args =>
+    val (env, browser) = args
 
     // given
     val registrationPage = browser.to(RegistrationPage)

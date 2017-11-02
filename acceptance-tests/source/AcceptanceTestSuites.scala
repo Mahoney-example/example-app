@@ -6,7 +6,7 @@ import uk.org.lidalia.exampleapp.acceptancetests.api.ApiTestSuites
 import uk.org.lidalia.exampleapp.acceptancetests.support.{FunctionalTestEnvironment, FunctionalTestEnvironmentFactory}
 import uk.org.lidalia.exampleapp.acceptancetests.website.WebsiteTestSuites
 
-class FunctionalTestSuites(
+class AcceptanceTestSuites(
   factoryData: FactoryData[FunctionalTestEnvironment]
 ) extends AroundSuites(factoryData) {
 

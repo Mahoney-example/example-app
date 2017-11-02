@@ -133,7 +133,7 @@
         <groupId>org.scalatest</groupId>
         <artifactId>scalatest-maven-plugin</artifactId>
         <configuration>
-          <suites>uk.org.lidalia.exampleapp.acceptancetests.FunctionalTestSuites</suites>
+          <suites>uk.org.lidalia.exampleapp.acceptancetests.AcceptanceTestSuites</suites>
         </configuration>
       </plugin>
       <plugin>
